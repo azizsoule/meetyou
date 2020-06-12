@@ -10,7 +10,6 @@
     $user = $_SESSION['user'];
 
 
-
     ?>
 
     <!DOCTYPE html>
@@ -30,7 +29,8 @@
             <!-- Div de gauche : liste-->
             <div class="list" id="params">
               <a href="#param-connexion"><h4>Paramètres de connexion</h4></a>
-              <a href="#preferences"><h4>Vos préférences</h4></a>
+              <a href="#preferences"><h4>Mes préférences</h4></a>
+              <a href="#infos_perso"><h4>Mes informations personnelles</h4></a>
 
             </div>
             <!-- Div de droite : screen -->
@@ -66,7 +66,7 @@
                 <div class="description">
                   <h2>Modification du mot de passe</h2>
                 </div>
-                <form class="" action="index.html" method="post" name="form_mdp" id="form_mdp">
+                <form class="" action="settings.php" method="post" name="form_mdp" id="form_mdp">
                   <div class="line">
                     <label for="new_mdp">Mot de passe:</label>
                     <input type="password" name="new_mdp" value="" placeholder="Entrer votre nouveau mot de passe ici">
@@ -95,53 +95,69 @@
               <div class="content" id="preferences">
                 <!-- Age et Taille -->
                 <div class="description">
-                  <h2>Age et taille</h2>
+                  <h2>Sexe, Age et taille</h2>
                 </div>
                 <form class="" action="index.html" method="post" name="form_pref" id="from_pref">
+                  <!-- Sexe -->
                   <div class="line">
+                    <label>Sexe recherché :</label>
+                    <select required name="sexeMatch">
+                        <option disabled selected value="">Sexe</option>
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                        <option value="Inconnu">Autre ...</option>
+                    </select>
+                  </div>
+
+                  <div class="line">
+                    <!-- Age -->
                     <label>Tranche d'age recherchée :</label>
-                    <select class="" name="age_inf" onchange="save(3);" >
-                      <option value="18">18</option>
-                      <option value="19">19</option>
-                      <option value="19">20</option>
+                    <select required id="ageMatch_inf" name="ageMatch_deb" onchange="sendvalue('ageMatch_inf','ageMatch_sup');save(3)">
+                      <option value="" selected disabled>0</option>
                     </select>
-                    <label for="sup">à</label>
-                    <select class="" name="age_sup" onchange="save(3);" >
-                      <option value="18">18</option>
-                      <option value="19">19</option>
-                      <option value="20">20</option>
+                    <label for="ageMatch_sup">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspà</label>
+                    <select required id="ageMatch_sup" name="ageMatch_fin" onchange="save(3)" >
+                      <option value="" selected disabled>0</option>
                     </select>
                   </div>
+                  <!-- Taille -->
                   <div class="line">
-                    <label>Taille comprise entre :</label>
-                    <input type="text" name="taille_inf" value="" placeholder="...cm" onchange="save(3);" >
-                    <label for="sup">et</label>
-                    <input type="text" name="taille_sup" value="" placeholder="...cm" onchange="save(3);" >
+                    <label>Taille (cm) comprise entre :</label>
+                    <select required id="tailleMatch_inf" name="tailleMatch_deb" onchange="sendvalue('tailleMatch_inf','tailleMatch_sup');save(3)">
+                        <option value="" selected disabled>0</option>
+                    </select>
+                    <label for="tailleMatch_sup">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspet</label>
+                    <select required id="tailleMatch_sup" name="tailleMatch_fin" onchange="save(3)">
+                        <option value="" selected disabled>0</option>
+                    </select>
                   </div>
+                  <!-- Nationalité et Réligion -->
                   <div class="description" id="ori">
-                    <h2>Origine et religion</h2>
+                    <h2>Nationalité et Religion</h2>
                   </div>
+                      <!-- Nationalité -->
                   <div class="line">
-                    <label for="">Origine:</label>
-                    <select class="" name="origine" onchange="save(3);" >
-                      <option value="Afrique">Afrique</option>
-                      <option value="Amérique">Amérique</option>
-                      <option value="Europe">Europe</option>
-                      <option value="Asie">Asie</option>
-                      <option value="Océanie">Océanie</option>
-                      <option value="Antartique">Antartique</option>
+                    <label for="">Nationalité:</label>
+                    <select class="" name="nationaliteMatch" onchange="save(3);">
+                      <option disabled selected value="">Nationalité</option>
+                      <option value="null">Sans importance</option>
+                      <?php include 'pays.php'; ?>
                     </select>
                   </div>
+                    <!--Réligion -->
                   <div class="line">
-                    <label for="religion">Réligion:</label>
-                    <select class="" name="religion" onchange="save(3);" >
-                      <option value="Chretient">Chretient</option>
-                      <option value="Musulman">Musulman</option>
-                      <option value="Juif">Juif</option>
-                      <option value="Boudhiste">Boudhiste</option>
-                      <option value="Sans importance">Sans importance</option>
+                    <label for="religion">Religion:</label>
+                    <select name="religionMatch" onchange="save(3);">
+                        <option disabled selected value="">Religion</option>
+                        <option value="null">Sans importance</option>
+                        <option value="Judaisme">Judaisme</option>
+                        <option value="Christianisme">Christianisme</option>
+                        <option value="Islam">Islam</option>
+                        <option value="Boudhisme">Boudhisme</option>
+                        <option value="Inconnue">Autre..</option>
                     </select>
                   </div>
+
                   <div class="line">
                     <input type="submit" name="" value="Sauvegarder" disabled id="btn_pref">
                     <input type="reset" name="" value="Annuler" id="btn_pref_annuler" onclick="javascript:document.getElementById('btn_pref').disabled = true;this.style.display='none';">
@@ -157,6 +173,37 @@
         <?php include '../../stuffs/footer.php'; ?>
 
       <script type="text/javascript">
+      setvalue("ageMatch_inf",18,80);
+      setvalue("tailleMatch_inf",100,200);
+
+
+      function setvalue(id,n,m){
+        var select = document.getElementById(id);
+        for(var i = n; i <= m; i++) {
+          var el = document.createElement("option");
+          el.textContent = i;
+          el.value = i;
+          select.appendChild(el);
+        }
+      }
+
+      function sendvalue(id,id2){
+        var select1 = document.getElementById(id); //Le premier select
+        var select2 = document.getElementById(id2);
+        var opts = select2.getElementsByTagName("option");
+        while(opts[1]) {
+            select2.removeChild(opts[1]);
+        }
+        var len = select1.options.length;
+        var n = select1.value;//on recupère la valeur courante du select
+        var m = select1.options[len-1].value;//on recupère la valeur du dernier élément du premier select
+        for(var i = n; i <= m; i++) {
+          var el = document.createElement("option");
+          el.textContent = i;
+          el.value = i;
+          select2.appendChild(el);
+          }
+        }
         function save(n){
           var x = document.querySelectorAll('#form_mdp input[type="password"]');
           var y = document.querySelectorAll('#form_pref select,input[type="text"]');

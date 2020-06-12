@@ -7,8 +7,11 @@
   session_start();
 
   if (isset($_SESSION['user'])) {
-
-    $user = $_SESSION['user'];
+    $bdd = Database::connect();
+    $req = $bdd->prepare("SELECT * FROM individu WHERE id=?");
+    $req->execute([$_SESSION['user']->id]);
+    $ind = $req->fetch();
+    $user = new Individu($ind);
 
     ?>
 

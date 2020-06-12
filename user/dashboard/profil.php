@@ -6,72 +6,117 @@
 
   session_start();
 
-  if (isset($_SESSION['user'])) {
+  if (!isset($_SESSION['user'])) {
+    header("location: ../../");
+  }
+  $bdd = Database::connect();
 
-    $bdd = Database::connect();
+  // Recuperation du user connecté
+  if (isset($_GET['id']) && isset($_GET['taux'])) {
 
-    // Recuperation du user connecté
-    if (isset($_GET['id']) && isset($_GET['taux'])) {
+    $req = $bdd->prepare("SELECT * FROM individu WHERE id=?");
+    $req->execute([$_GET['id']]);
 
-      $req = $bdd->prepare("SELECT * FROM individu WHERE id=?");
-      $req->execute([$_GET['id']]);
+    $ind = $req->fetch();
 
-      $ind = $req->fetch();
+    $user = new Individu($ind);
+  }else {
+    $user = $_SESSION['user'];
+  }
+  if (isset($_POST['valider'])) {
+    // isset($_POST['nom']) || isset($_POST['prenoms']) || isset($_POST['date_naissance']) || isset($_POST['nationalite'])
+    //   || isset($_POST['sexe']) || isset($_POST['profession']) || isset($_POST['religion']) || isset($_POST['telephone']) || isset($_POST['pays']) || isset($_POST['ville'])
 
-      $user = new Individu($ind);
-    }else {
-      $user = $_SESSION['user'];
-    }
+    $nom = $_POST['nom'];
+    $prenoms = $_POST['prenoms'];
+    $date_naissance = $_POST['date_naissance'];
 
-    // Recuperation de la description du user
-    $req = $bdd->prepare("SELECT * FROM description WHERE id_description=?");
-    $req->execute([$user->id_description]);
+    $nationalite = $_POST['nationalite'];
+    $sexe = $_POST['sexe'];
+    $profession = $_POST['profession'];
+    $religion = $_POST['religion'];
+    $telephone = $_POST['tel'];
+    $pays = $_POST['pays'];
+    $ville = $_POST['ville'];
 
-    $description = $req->fetch();
+    // echo 'nom = '.$nom.' prenom = '.$prenoms.' date = '.$date_naissance.' nation = '.$nationalite.' sexe = '.$sexe.' prof = '.$profession.' religion = '.$religion.' tel = '.$telephone.' pays = '.$pays.' ville = '.$ville;
 
-    // Recuperation des criteres du user
-    $req = $bdd->prepare("SELECT * FROM critere WHERE id_critere=?");
-    $req->execute([$user->id_critere]);
 
-    $critere = $req->fetch();
+    $req = $bdd->prepare("UPDATE individu SET nom =?,prenoms =?,telephone =?,sexe =?,date_naissance =?,profession =?,nationalite = ?,religion =?,id_ville = ?,id_pays = ? WHERE id=?");
+    $req->execute([$nom,$prenoms,$telephone,$sexe,$date_naissance,$profession,$nationalite,$religion,$ville,$pays,$user->id]);
 
-    // Recuperation du pays de residence du user
+    echo '<script type="text/javascript">alert("Modification effectuée avec succès!!");window.location = "profil.php";</script>';
+
+  }
+  if (isset($_GET['id']) && isset($_GET['taux'])) {
+
+    $req = $bdd->prepare("SELECT * FROM individu WHERE id=?");
+    $req->execute([$_GET['id']]);
+
+    $ind = $req->fetch();
+
+    $user = new Individu($ind);
+  }else {
+    $req = $bdd->prepare("SELECT * FROM individu WHERE id=?");
+    $req->execute([$user->id]);
+    $ind = $req->fetch();
+    $user = new Individu($ind);
+  }
+
+  // Recuperation de la description du user
+  $req = $bdd->prepare("SELECT * FROM description WHERE id_description=?");
+  $req->execute([$user->id_description]);
+
+  $description = $req->fetch();
+
+  $_SESSION['description'] = $description;
+
+  // Recuperation des criteres du user
+  $req = $bdd->prepare("SELECT * FROM critere WHERE id_critere=?");
+  $req->execute([$user->id_critere]);
+
+  $critere = $req->fetch();
+  $_SESSION['critere'] = $critere;
+  // Recuperation du pays de residence du user
+  $req = $bdd->prepare("SELECT * FROM pays WHERE id_pays=?");
+  $req->execute([$user->id_pays]);
+
+  $pays = $req->fetch();
+  $_SESSION['pays'] = $pays;
+  // Recuperation de la ville de residence du user
+  $req = $bdd->prepare("SELECT * FROM villes WHERE id_ville=?");
+  $req->execute([$user->id_ville]);
+
+  $ville = $req->fetch();
+  $_SESSION['ville'] = $ville;
+  // Recuperation de la nationalite du user
+  $req = $bdd->prepare("SELECT * FROM pays WHERE id_pays=?");
+  $req->execute([$user->nationalite]);
+
+  $nationalite = $req->fetch();
+  $_SESSION['nationalite'] = $nationalite;
+
+  if ($critere['nationalite'] == null) {
+    $nationaliteMatch = array("nom_pays"=>"Sans importance");
+  }else {
     $req = $bdd->prepare("SELECT * FROM pays WHERE id_pays=?");
-    $req->execute([$user->id_pays]);
+    $req->execute([$critere['nationalite']]);
 
-    $pays = $req->fetch();
+    $nationaliteMatch = $req->fetch();
+  }
+  // echo("Taille user = ".getDescription($user,'taille'));
+  // echo("Sexe_critere user = ".getCritere($user,'sexe'));
+  // echo("nationalite user = ".getNationalite($user->nationalite));
+  $user->matches = getMatchs($user);
+  $matchs = $user->matches;
+  // ordonner($matchs);
 
-    // Recuperation de la ville de residence du user
-    $req = $bdd->prepare("SELECT * FROM villes WHERE id_ville=?");
-    $req->execute([$user->id_ville]);
+  // echo("Taille = ".count($matchs));
+  // foreach ($matchs as $match ) {
+  //   echo ("Taux: ".$match->taux);
+  // }
 
-    $ville = $req->fetch();
 
-    // Recuperation de la nationalite du user
-    $req = $bdd->prepare("SELECT * FROM pays WHERE id_pays=?");
-    $req->execute([$user->nationalite]);
-
-    $nationalite = $req->fetch();
-
-    if ($critere['nationalite'] == null) {
-      $nationaliteMatch = array("nom_pays"=>"Sans importance");
-    }else {
-      $req = $bdd->prepare("SELECT * FROM pays WHERE id_pays=?");
-      $req->execute([$critere['nationalite']]);
-
-      $nationaliteMatch = $req->fetch();
-    }
-    // echo("Taille user = ".getDescription($user,'taille'));
-    // echo("Sexe_critere user = ".getCritere($user,'sexe'));
-    // echo("nationalite user = ".getNationalite($user->nationalite));
-    $user->matches = getMatchs($user);
-    $matchs = $user->matches;
-    // ordonner($matchs);
-
-    // echo("Taille = ".count($matchs));
-    // foreach ($matchs as $match ) {
-    //   echo ("Taux: ".$match->taux);
-    // }
     ?>
 
     <!DOCTYPE html>
@@ -90,6 +135,7 @@
         </title>
         <link rel="stylesheet" href="../../css/profil.css">
       </head>
+
       <body>
 
         <?php include '../../stuffs/header.php'; ?>
@@ -152,7 +198,7 @@
           <div id="Profil" class="tabcontent">
             <div class="tabsupp">
               <div class="description">
-                <h2><?php echo (isset($_GET['id']) && isset($_GET['taux'])) ? "Description" : "Ma description personnelle"; ?></h2>
+                <h2><?php echo (isset($_GET['id']) && isset($_GET['taux'])) ? "Description de ".$user->nom : "Ma description personnelle"; ?></h2>
               </div>
               <div class="container">
                 <fieldset>
@@ -191,7 +237,7 @@
 
                   <div class="ico-value">
                     <div class="icons"><img src="../../images/icons/icons8-langue-50.png" alt=""></div>
-                    <h4><?php echo $nationalite['nom_pays']; ?></h4>
+                    <h4><?php echo $nationalite['nom_pays']?></h4>
                   </div>
 
                   <div class="ico-value">
@@ -263,57 +309,74 @@
             <?php
 
               if (!(isset($_GET['id']) && isset($_GET['taux']))) {
-                ?>
 
+
+                ?>
+                <script type="text/javascript">
+
+                </script>
                 <div  id = "info" class="tabsupp">
                   <div class="description">
                     <h2>Informations personnelles</h2>
                   </div>
                   <div class="info-content">
-                    <form action="#" method="post">
+                    <form name = "infos_perso" action="profil.php" method="post">
 
-                      <input  type="text" name="nom" id="" placeholder="Nom" disabled >
+                      <input  type="text" name="nom" id="" placeholder="Nom" disabled value="<?php echo $user->nom;?>" onchange="dis();">
 
-                      <input  type="text" name="prenoms" id="" placeholder="Prenoms" disabled >
+                      <input  type="text" name="prenoms" id="" placeholder="Prenoms" disabled value="<?php echo $user->prenoms ;?>"  onchange="dis();">
+                      <input  type="date" name="date_naissance" id="" placeholder="Date de naissance" min='1940-01-01' max='2002-12-31' disabled value="<?php echo $user->date_naissance;?>"  onchange="dis();">
 
-                      <select name="nationalite" disabled >
-                          <option disabled selected value="">Nationalité</option>
+                      <select name="nationalite" disabled  onchange="dis();">
+                          <option  selected value="<?php echo $user->nationalite;?>"><?php echo getNationalite($user->nationalite) ;?>(Nationalité)</option>
+
+                      </select>
+
+                      <select name="sexe" disabled  onchange="dis();">
+                          <option selected value="<?php echo $user->sexe ;?>"><?php echo $user->sexe ;?></option>
+                          <option value="Homme">Homme</option>
+                          <option value="Femme">Femme</option>
+                          <option value="Inconnu">Autre ...</option>
+                      </select>
+
+                      <input  type="text"  name="tel" id="" placeholder="Telephone" disabled value="<?php echo $user->telephone ;?>"  onchange="dis();">
+
+                      <select name="pays" disabled onchange="dis();">
+                          <option selected value="<?php echo $user->id_pays ;?>" ><?php echo getNationalite($user->id_pays),$user->id_pays ;?>(Pays de Residence)</option>
                           <option value="">Element 1</option>
                           <option value="">Element 2</option>
                           <option value="">Element 3</option>
                       </select>
 
-                      <select name="sexe" disabled >
-                          <option disabled selected value="">Sexe</option>
-                          <option value="">Homme</option>
-                          <option value="">Femme</option>
-                          <option value="">Autre ...</option>
-                      </select>
-
-                      <input  type="text"  name="tel" id="" placeholder="Telephone" disabled >
-
-                      <select name="pays" disabled>
-                          <option disabled selected value="" disabled >Pays de residence</option>
+                      <select name="ville" disabled  onchange="dis();">
+                          <option selected value="<?php echo $user->id_ville ;?>"><?php echo getVille($user->id_ville) ;?>(Ville de Residence)</option>
                           <option value="">Element 1</option>
                           <option value="">Element 2</option>
                           <option value="">Element 3</option>
                       </select>
 
-                      <select name="ville" disabled >
-                          <option disabled selected value="">Ville</option>
-                          <option value="">Element 1</option>
-                          <option value="">Element 2</option>
-                          <option value="">Element 3</option>
+                      <input  type="text" disabled name="profession" id="" placeholder="Profession" value="<?php echo $user->profession ;?>"  onchange="dis();">
+
+                      <select name="religion" disabled  onchange="dis();">
+                          <option selected value="<?php echo $user->religion ;?>"><?php echo $user->religion ;?></option>
+                          <option value="Judaisme">Judaisme</option>
+                          <option value="Christianisme">Christianisme</option>
+                          <option value="Islam">Islam</option>
+                          <option value="Boudhisme">Boudhisme</option>
+                          <option value="Inconnue">Autre..</option>
                       </select>
+
                       <button type="button" name="modifier"  id="btn_modifier" onclick="enable_info();">Modifier les infos personnelles</button>
 
-                      <input type="submit" name="valider" id="btn_valider" value="Valider">
+                      <button type="submit" name="valider" class="btn_valider" id="btn_valider" value="" disabled >Valider</button>
+                      <button type="reset" name="annuler" class="btn_annuler" id="btn_annuler" value="" onclick="disable();">Annuler</button>
 
                     </form>
 
                   </div>
 
                 </div>
+
 
                 <?php
               }
@@ -385,6 +448,9 @@
         <?php include '../../stuffs/footer.php'; ?>
 
         <script>
+
+          function dis(){document.getElementById('btn_valider').disabled = false}
+
           function openTab(evt, option) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -398,11 +464,21 @@
             document.getElementById(option).style.display = "block";
             evt.currentTarget.className += " active";
         }
-        function enable(id){
-          document.getElementById(id).disabled = false;
+        function disable(){
+            var items = document.querySelectorAll('#info input');
+            var items2 = document.querySelectorAll('#info select');
+            for (var i = 0; i < items.length; i++) {
+              items[i].disabled = !items[i].disabled;
+            }
+            for (var j = 0; j < items2.length; j++) {
+              items2[j].disabled = !items2[j].disabled;
+            }
+            document.getElementById('btn_modifier').style.display="block";
+            document.getElementById('btn_valider').style.display="none";
+            document.getElementById('btn_annuler').style.display="none";
         }
         function enable_info(){
-          var items = document.querySelectorAll('#info input[type="text"]');
+          var items = document.querySelectorAll('#info input');
           var items2 = document.querySelectorAll('#info select');
           for (var i = 0; i < items.length; i++) {
             items[i].disabled = !items[i].disabled;
@@ -412,6 +488,7 @@
           }
           document.getElementById('btn_modifier').style.display="none";
           document.getElementById('btn_valider').style.display="block";
+          document.getElementById('btn_annuler').style.display="block";
         }
         // Get the element with id="defaultOpen" and click on it
         document.getElementById("defaultOpen").click();
@@ -419,13 +496,3 @@
       </body>
 
     </html>
-
-
-    <?php
-
-  } else {
-    header("location: ../../");
-  }
-
-
- ?>

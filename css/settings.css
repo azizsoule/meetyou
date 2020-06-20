@@ -168,14 +168,19 @@ input[type = "submit"]:disabled,input[type = "reset"]:disabled{
   background-color: rgb(194, 192, 184);
 }
 
-#preferences select{
+#preferences select, #description_personnelle select{
   border-radius: 3px;
   padding: 10px;
   border: 1px solid rgb(175, 173, 166);
-  width: 100px;
+  width: 30%;
   background-color: white;
   font-size: 17px;
 }
+#description_personnelle select{
+  width: 100%;
+  background-color: rgb(244, 241, 229);
+}
+
 #preferences select[name ="origine"],#preferences select[name ="religion"]{
   width: 150px;
   font-size: 14px;
@@ -191,17 +196,23 @@ input[type = "submit"]:disabled,input[type = "reset"]:disabled{
 #ori{
   margin-top: 0;
 }
-#preferences input[type ="submit"],input[type="reset"]{
+#preferences input[type ="submit"],input[type="reset"], #description_personnelle input[type ="submit"],input[type="reset"], #centre_interet input[type ="submit"],input[type="reset"] {
   float: none;
   width: 30%;
   margin-left: 35%;
   margin-right: 35%;
 }
-#preferences input[type ="reset"]{
+#preferences input[type ="reset"], #description_personnelle input[type ="reset"], #centre_interet input[type ="reset"]{
   margin-top: 8px;
   background-color: red;
   color: white;
   display: none;
+}
+.line textarea{
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 15px;
+
 }
 /* icons */
 
@@ -245,5 +256,58 @@ input[type = "submit"]:disabled,input[type = "reset"]:disabled{
   float: left;
 }
 
-
 /* icons */
+
+/* Centre d'interet*/
+/* checkbox centre d'intérêts*/
+.container_ci {
+    text-align: center;
+    padding-right: 0;
+}
+
+ul.ci {
+    list-style: none;
+}
+ul.ci li{
+  /* border: 1px solid black; */
+  margin: 0 5px;
+  padding: 0;
+  display: inline;
+}
+ul.ci li label{
+    display: inline-block;
+    border: 1px solid black;
+    color: #adadad;
+    border-radius: 25px;
+    white-space: nowrap;
+    margin: 3px 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all .2s;
+    font-size: 20px;
+}
+
+ul.ci li label {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+ul.ci li input[type="checkbox"]:checked + label {
+    background-color: rgba(0, 11, 32, 0.90);
+    color: #fff;
+    transition: all .2s;
+}
+
+ul.ci li input[type="checkbox"] {
+  display: absolute;
+  position: absolute;
+  opacity: 0;
+}
+
+ul.ci li input[type="checkbox"]:focus + label {
+  border: 2px solid grey;
+}

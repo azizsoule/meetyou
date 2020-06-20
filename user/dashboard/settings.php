@@ -30,7 +30,8 @@
             <div class="list" id="params">
               <a href="#param-connexion"><h4>Paramètres de connexion</h4></a>
               <a href="#preferences"><h4>Mes préférences</h4></a>
-              <a href="#infos_perso"><h4>Mes informations personnelles</h4></a>
+              <a href="#description_personnelle"><h4>Ma description personnelle</h4></a>
+              <a href="#centre_interet"><h4>Mes centres d'intérêts</h4></a>
 
             </div>
             <!-- Div de droite : screen -->
@@ -131,7 +132,31 @@
                         <option value="" selected disabled>0</option>
                     </select>
                   </div>
-                  <!-- Nationalité et Réligion -->
+                  <!-- Teint & Morphologie -->
+                  <div class="description" id="ori">
+                    <h2>Teint et morphologie</h2>
+                  </div>
+                  <!-- Teint profil recherché -->
+                  <div class="line">
+                    <label for="teintMatch">Teint</label>
+                    <select id="teintMatch" name="teintMatch" onchange="save(3)">
+                        <option value="" selected disabled>Teint</option>
+                        <option value="Clair">Clair</option>
+                        <option value="Noir">Noir</option>
+                        <option value="Bronze">Bronzé</option>
+                    </select>
+                  </div>
+                  <!-- Morphologie profil recherché -->
+                  <div class="line">
+                    <label for="morphMatch">Morphologie</label>
+                    <select id="morphMatch" name="morphMatch" onchange="save(3)">
+                        <option value="" selected disabled>Votre morphologie</option>
+                        <option value="Mince">Mince</option>
+                        <option value="Gros">Gros</option>
+                        <option value="Autre">Autre ...</option>
+                    </select>
+                  </div>
+                  <!-- Nationalité & Réligion -->
                   <div class="description" id="ori">
                     <h2>Nationalité et Religion</h2>
                   </div>
@@ -165,6 +190,71 @@
                 </form>
               </div>
               <!-- Fin Div Vos preferencess -->
+
+              <!-- Div Ma description personnelle -->
+              <div class="content" id="description_personnelle">
+                <!-- Age et Taille -->
+                <div class="description">
+                  <h2>Description Personnelle</h2>
+                </div>
+                <form class="" action="index.html" method="post" name="form_desc" id="from_desc">
+
+                  <!-- Taille User -->
+                  <div class="line">
+
+                    <select id="tailleUser" name="tailleUser" onchange="save(3)">
+                        <option value="" selected disabled>Votre taille (cm)</option>
+                    </select>
+                  </div>
+                  <!-- Teint User -->
+                  <div class="line">
+
+                    <select id="teintUser" name="teintUser" onchange="save(3)">
+                        <option value="" selected disabled>Votre teint</option>
+                        <option value="Clair">Clair</option>
+                        <option value="Noir">Noir</option>
+                        <option value="Bronze">Bronzé</option>
+                    </select>
+                  </div>
+                  <!-- Morphologie User -->
+                  <div class="line">
+
+                    <select id="morphUser" name="morphUser" onchange="save(3)">
+                        <option value="" selected disabled>Votre morphologie</option>
+                        <option value="Mince">Mince</option>
+                        <option value="Gros">Gros</option>
+                        <option value="Autre">Autre ...</option>
+                    </select>
+                  </div>
+
+                  <!-- Info supplémentaires  User -->
+                  <div class="line">
+                    <textarea name="name" rows="8" cols="80" placeholder="Informations supllémentaires"></textarea>
+                  </div>
+
+                  <div class="line">
+                    <input type="submit" name="" value="Sauvegarder" disabled id="btn_pref">
+                    <input type="reset" name="" value="Annuler" id="btn_pref_annuler" onclick="javascript:document.getElementById('btn_pref').disabled = true;this.style.display='none';">
+                  </div>
+                </form>
+              </div>
+              <!-- Fin Div Ma description personnelle -->
+
+              <!-- Div Mes centres d'intérêts -->
+              <div class="content" id="centre_interet">
+
+                <div class="description">
+                  <h2>Mes centres d'intérêt</h2>
+                </div>
+                <form class="" action="index.html" method="post" name="form_ci" id="from_ci">
+
+                  <div class="line">
+                    <input type="submit" name="" value="Sauvegarder" disabled id="btn_pref">
+                    <input type="reset" name="" value="Annuler" id="btn_pref_annuler" onclick="javascript:document.getElementById('btn_pref').disabled = true;this.style.display='none';">
+                  </div>
+                </form>
+              </div>
+              <!-- Fin Div Div Mes centres d'intérêts -->
             </div>
 
           </div>
@@ -175,6 +265,7 @@
       <script type="text/javascript">
       setvalue("ageMatch_inf",18,80);
       setvalue("tailleMatch_inf",100,200);
+      setvalue("tailleUser",100,200);
 
 
       function setvalue(id,n,m){

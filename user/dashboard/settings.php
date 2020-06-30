@@ -2,15 +2,87 @@
 
   include '../../config/Database.php';
   include '../../models/Individu.php';
+  include '../../php/functions.php';
 
   session_start();
 
-  if (isset($_SESSION['user'])) {
+  if (!isset($_SESSION['user'])) {
 
-    $user = $_SESSION['user'];
+    header('location: ../../');
+    }
+
+  $user = $_SESSION['user'];
+  $bdd = Database::connect();
 
 
-    ?>
+  // Recuperation des criteres du user
+  $req = $bdd->prepare("SELECT * FROM critere WHERE id_critere=?");
+  $req->execute([$user->id_critere]);
+
+  $critere = $req->fetch();
+
+  // Modidication adresse email
+  if(isset($_POST['btn_mail'])){
+    $new_mail = $_POST['mail'];
+    $req = $bdd->prepare("UPDATE individu SET email =? WHERE id=?");
+    $req->execute([$new_mail,$user->id]);
+
+    echo '<script type="text/javascript">alert("Votre addresse mail a été modifiée avec succès!!");window.location = "settings.php";</script>';
+    session_destroy();
+  }
+// Modidication mot de passe
+
+  if(isset($_POST['btn_mdp'])){
+    $new_mdp = $_POST['new_mdp'];
+    $req = $bdd->prepare("UPDATE individu SET password =? WHERE id=?");
+    $req->execute([$new_mdp,$user->id]);
+
+    echo '<script type="text/javascript">alert("Modification effectuée avec succès!!");window.location = "settings.php";</script>';
+    session_destroy();
+  }
+// Modidication mes preferences
+
+if(isset($_POST['btn_pref'])){
+
+      // Recuperation des infos sur le profil recherché
+      $ageMatch_deb = $_POST['ageMatch_deb'];
+      $ageMatch_fin = $_POST['ageMatch_fin'];
+      $sexeMatch = $_POST['sexeMatch'];
+      $teintMatch = $_POST['teintMatch'];
+      $tailleMatch_deb = $_POST['tailleMatch_deb'];
+      $tailleMatch_fin = $_POST['tailleMatch_fin'];
+      $morphologieMatch = $_POST['morphologieMatch'];
+      $nationaliteMatch = $_POST['nationaliteMatch'];
+      $religionMatch = $_POST['religionMatch'];
+
+
+      // Verifier si certains criteres n'ont pas d'importance pour le user
+      if ($teintMatch == 'null') {
+        $teintMatch = null;
+      }
+
+      if ($morphologieMatch == 'null') {
+        $morphologieMatch = null;
+      }
+
+      if ($nationaliteMatch == 'null') {
+        $nationaliteMatch = null;
+      }
+
+      if ($religionMatch == 'null') {
+        $religionMatch = null;
+      }
+
+  $req = $bdd->prepare("UPDATE critere SET age_deb =?, age_fin=?, sexe=?, teint=?, taille_deb =?, taille_fin =?, morphologie =?, nationalite =?, religion =? WHERE id_critere=?");
+  $req->execute([$ageMatch_deb,$ageMatch_fin,$sexeMatch,
+  $teintMatch,$tailleMatch_deb,$tailleMatch_fin,$morphologieMatch,
+  $nationaliteMatch,$religionMatch,$user->id_critere]);
+
+  echo '<script type="text/javascript">alert("Modification de vos préférences effectuée avec succès!!");window.location = "settings.php";</script>';
+}
+
+
+ ?>
 
     <!DOCTYPE html>
     <html lang="fr" dir="ltr">
@@ -60,7 +132,7 @@
                     <label for="mail">Je souhaite recevoir mes notifications par email</label>
                   </div>
 
-                  <input id="btn_mail" type="submit" name="" value="Enregistrer" disabled>
+                  <input id="btn_mail" type="submit" name="btn_mail" value="Enregistrer" disabled>
                 </form>
 
                 <!-- Modification mot de passe -->
@@ -70,13 +142,14 @@
                 <form class="" action="settings.php" method="post" name="form_mdp" id="form_mdp">
                   <div class="line">
                     <label for="new_mdp">Mot de passe:</label>
-                    <input type="password" name="new_mdp" value="" placeholder="Entrer votre nouveau mot de passe ici">
+                    <input type="password" name="new_mdp" value="" placeholder="Entrer votre nouveau mot de passe ici" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                    title="Doit contenir au moins un chiffre,une lettre majuscule,une lettre miniscule, et au moins 6 caractères">
                   </div>
                   <div class="line">
                     <label for="conf_new_mdp">Confirmation :</label>
                     <input type="password" name="conf_new_mdp" value="" placeholder="Confirmer le mot de passe" onchange="save(2);">
                   </div>
-                  <input id="btn_mdp" type="submit" name="" value="Enregistrer" disabled >
+                  <input id="btn_mdp" type="submit" name="btn_mdp" value="Enregistrer" disabled >
                 </form>
 
                 <!-- Fermer mon compte -->
@@ -98,38 +171,54 @@
                 <div class="description">
                   <h2>Sexe, Age et taille</h2>
                 </div>
-                <form class="" action="index.html" method="post" name="form_pref" id="from_pref">
+                <form class="" action="settings.php" method="post" name="form_pref" id="from_pref">
                   <!-- Sexe -->
                   <div class="line">
                     <label>Sexe recherché :</label>
-                    <select required name="sexeMatch">
-                        <option disabled selected value="">Sexe</option>
-                        <option value="Homme">Homme</option>
-                        <option value="Femme">Femme</option>
-                        <option value="Inconnu">Autre ...</option>
+                    <select  name="sexeMatch" onchange="save(3);">
+                        <option selected value="<?php echo $critere['sexe']; ?>"><?php echo $critere['sexe']; ?></option>
+                        <?php
+                          if ($critere['sexe']=="Femme") {
+                            ?>
+                            <option value="Homme">Homme</option>
+                            <option value="Inconnu">Autre ...</option>
+                            <?php
+                        }
+                        elseif($critere['sexe']=="Homme"){
+                          ?>
+                          <option value="Femme">Femme</option>
+                          <option value="Inconnu">Autre ...</option>
+                        <?php
+                        }else {
+                          ?>
+                          <option value="Femme">Femme</option>
+                          <option value="Homme">Homme</option>
+                          <?php
+                        }
+                         ?>
                     </select>
                   </div>
 
                   <div class="line">
                     <!-- Age -->
                     <label>Tranche d'age recherchée :</label>
-                    <select required id="ageMatch_inf" name="ageMatch_deb" onchange="sendvalue('ageMatch_inf','ageMatch_sup');save(3)">
-                      <option value="" selected disabled>0</option>
+                    <select id="ageMatch_deb" name="ageMatch_deb" onchange="sendvalue('ageMatch_deb','ageMatch_fin');save(3)">
+                      <option value="<?php echo $critere['age_deb']; ?>" selected disabled><?php echo $critere['age_deb']; ?></option>
                     </select>
-                    <label for="ageMatch_sup">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspà</label>
-                    <select required id="ageMatch_sup" name="ageMatch_fin" onchange="save(3)" >
-                      <option value="" selected disabled>0</option>
+                    <label for="ageeMatch_fin">&nbsp&nbspà&nbsp&nbsp</label>
+                    <select id="ageMatch_fin" name="ageMatch_fin" onchange="save(3)" >
+                      <option value="<?php echo $critere['age_fin']; ?>" selected disabled><?php echo $critere['age_fin']; ?></option>
                     </select>
                   </div>
                   <!-- Taille -->
                   <div class="line">
                     <label>Taille (cm) comprise entre :</label>
-                    <select required id="tailleMatch_inf" name="tailleMatch_deb" onchange="sendvalue('tailleMatch_inf','tailleMatch_sup');save(3)">
-                        <option value="" selected disabled>0</option>
+                    <select  id="tailleMatch_deb" name="tailleMatch_deb" onchange="sendvalue('tailleMatch_deb','tailleMatch_fin');save(3)">
+                        <option value="<?php echo $critere['taille_deb']; ?>" selected disabled><?php echo $critere['taille_deb']; ?></option>
                     </select>
-                    <label for="tailleMatch_sup">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspet</label>
-                    <select required id="tailleMatch_sup" name="tailleMatch_fin" onchange="save(3)">
-                        <option value="" selected disabled>0</option>
+                    <label for="tailleMatch_fin">&nbspet&nbsp</label>
+                    <select id="tailleMatch_fin" name="tailleMatch_fin" onchange="save(3)">
+                        <option value="<?php echo $critere['taille_fin']; ?>" selected disabled><?php echo $critere['taille_fin']; ?></option>
                     </select>
                   </div>
                   <!-- Teint & Morphologie -->
@@ -140,20 +229,21 @@
                   <div class="line">
                     <label for="teintMatch">Teint</label>
                     <select id="teintMatch" name="teintMatch" onchange="save(3)">
-                        <option value="" selected disabled>Teint</option>
+                      <option value="<?php echo $critere['teint']; ?>" selected disabled><?php  echo($critere['teint'] == null) ? 'Sans importance' :$critere['teint']; ?></option>
                         <option value="Clair">Clair</option>
                         <option value="Noir">Noir</option>
                         <option value="Bronze">Bronzé</option>
+                        <option value="null">Sans importance</option>
                     </select>
                   </div>
                   <!-- Morphologie profil recherché -->
                   <div class="line">
                     <label for="morphMatch">Morphologie</label>
                     <select id="morphMatch" name="morphMatch" onchange="save(3)">
-                        <option value="" selected disabled>Votre morphologie</option>
+                        <option value="<?php echo $critere['morphologie']; ?>" selected disabled><?php  echo($critere['morphologie'] == null) ? 'Sans importance' :$critere['morphologie']; ?></option>
                         <option value="Mince">Mince</option>
                         <option value="Gros">Gros</option>
-                        <option value="Autre">Autre ...</option>
+                        <option value="null">Sans importance</option>
                     </select>
                   </div>
                   <!-- Nationalité & Réligion -->
@@ -164,16 +254,16 @@
                   <div class="line">
                     <label for="">Nationalité:</label>
                     <select class="" name="nationaliteMatch" onchange="save(3);">
-                      <option disabled selected value="">Nationalité</option>
+                      <option value="<?php echo $critere['nationalite']; ?>" selected disabled><?php  echo($critere['nationalite'] == null) ? 'Sans importance' :getNationalite($critere['nationalite']); ?></option>
                       <option value="null">Sans importance</option>
-                      <?php include 'pays.php'; ?>
+                      <?php include '../inscription/pays.php'; ?>
                     </select>
                   </div>
                     <!--Réligion -->
                   <div class="line">
                     <label for="religion">Religion:</label>
                     <select name="religionMatch" onchange="save(3);">
-                        <option disabled selected value="">Religion</option>
+                        <option value="<?php echo $critere['religion']; ?>" selected disabled><?php  echo($critere['religion'] == null) ? 'Sans importance' :$critere['religion']; ?></option>
                         <option value="null">Sans importance</option>
                         <option value="Judaisme">Judaisme</option>
                         <option value="Christianisme">Christianisme</option>
@@ -184,8 +274,8 @@
                   </div>
 
                   <div class="line">
-                    <input type="submit" name="" value="Sauvegarder" disabled id="btn_pref">
-                    <input type="reset" name="" value="Annuler" id="btn_pref_annuler" onclick="javascript:document.getElementById('btn_pref').disabled = true;this.style.display='none';">
+                    <input type="submit" name="btn_pref" value="Sauvegarder" disabled id="btn_pref">
+                    <input type="reset" name="btn_pref_annuler" value="Annuler" id="btn_pref_annuler" onclick="javascript:document.getElementById('btn_pref').disabled = true;this.style.display='none';">
                   </div>
                 </form>
               </div>
@@ -263,8 +353,8 @@
         <?php include '../../stuffs/footer.php'; ?>
 
       <script type="text/javascript">
-      setvalue("ageMatch_inf",18,80);
-      setvalue("tailleMatch_inf",100,200);
+      setvalue("ageMatch_deb",18,80);
+      setvalue("tailleMatch_deb",100,200);
       setvalue("tailleUser",100,200);
 
 
@@ -320,14 +410,3 @@
       </script>
       </body>
     </html>
-
-    <?php
-
-  } else {
-
-    header('location: ../../');
-
-  }
-
-
- ?>

@@ -21,7 +21,14 @@
 
   $critere = $req->fetch();
 
-  // Modidication adresse email
+
+  // Recuperation description utilisateur
+  $req = $bdd->prepare("SELECT * FROM description WHERE id_description=?");
+  $req->execute([$user->id_description]);
+
+  $description = $req->fetch();
+
+  // *********Modidication adresse email*********
   if(isset($_POST['btn_mail'])){
     $new_mail = $_POST['mail'];
     $req = $bdd->prepare("UPDATE individu SET email =? WHERE id=?");
@@ -30,7 +37,8 @@
     echo '<script type="text/javascript">alert("Votre addresse mail a été modifiée avec succès!!");window.location = "settings.php";</script>';
     session_destroy();
   }
-// Modidication mot de passe
+
+  // *********Modidication mot de passe*********
 
   if(isset($_POST['btn_mdp'])){
     $new_mdp = $_POST['new_mdp'];
@@ -40,46 +48,62 @@
     echo '<script type="text/javascript">alert("Modification effectuée avec succès!!");window.location = "settings.php";</script>';
     session_destroy();
   }
-// Modidication mes preferences
+  // *********Modidication mes preferences*********
 
-if(isset($_POST['btn_pref'])){
+  if(isset($_POST['btn_pref'])){
 
-      // Recuperation des infos sur le profil recherché
-      $ageMatch_deb = $_POST['ageMatch_deb'];
-      $ageMatch_fin = $_POST['ageMatch_fin'];
-      $sexeMatch = $_POST['sexeMatch'];
-      $teintMatch = $_POST['teintMatch'];
-      $tailleMatch_deb = $_POST['tailleMatch_deb'];
-      $tailleMatch_fin = $_POST['tailleMatch_fin'];
-      $morphologieMatch = $_POST['morphologieMatch'];
-      $nationaliteMatch = $_POST['nationaliteMatch'];
-      $religionMatch = $_POST['religionMatch'];
+        // Recuperation des infos sur le profil recherché
+        $ageMatch_deb = $_POST['ageMatch_deb'];
+        $ageMatch_fin = $_POST['ageMatch_fin'];
+        $sexeMatch = $_POST['sexeMatch'];
+        $teintMatch = $_POST['teintMatch'];
+        $tailleMatch_deb = $_POST['tailleMatch_deb'];
+        $tailleMatch_fin = $_POST['tailleMatch_fin'];
+        $morphologieMatch = $_POST['morphologieMatch'];
+        $nationaliteMatch = $_POST['nationaliteMatch'];
+        $religionMatch = $_POST['religionMatch'];
 
 
-      // Verifier si certains criteres n'ont pas d'importance pour le user
-      if ($teintMatch == 'null') {
-        $teintMatch = null;
-      }
+        // Verifier si certains criteres n'ont pas d'importance pour le user
+        if ($teintMatch == 'null') {
+          $teintMatch = null;
+        }
 
-      if ($morphologieMatch == 'null') {
-        $morphologieMatch = null;
-      }
+        if ($morphologieMatch == 'null') {
+          $morphologieMatch = null;
+        }
 
-      if ($nationaliteMatch == 'null') {
-        $nationaliteMatch = null;
-      }
+        if ($nationaliteMatch == 'null') {
+          $nationaliteMatch = null;
+        }
 
-      if ($religionMatch == 'null') {
-        $religionMatch = null;
-      }
+        if ($religionMatch == 'null') {
+          $religionMatch = null;
+        }
 
-  $req = $bdd->prepare("UPDATE critere SET age_deb =?, age_fin=?, sexe=?, teint=?, taille_deb =?, taille_fin =?, morphologie =?, nationalite =?, religion =? WHERE id_critere=?");
-  $req->execute([$ageMatch_deb,$ageMatch_fin,$sexeMatch,
-  $teintMatch,$tailleMatch_deb,$tailleMatch_fin,$morphologieMatch,
-  $nationaliteMatch,$religionMatch,$user->id_critere]);
+    $req = $bdd->prepare("UPDATE critere SET age_deb =?, age_fin=?, sexe=?, teint=?, taille_deb =?, taille_fin =?, morphologie =?, nationalite =?, religion =? WHERE id_critere=?");
+    $req->execute([$ageMatch_deb,$ageMatch_fin,$sexeMatch,
+    $teintMatch,$tailleMatch_deb,$tailleMatch_fin,$morphologieMatch,
+    $nationaliteMatch,$religionMatch,$user->id_critere]);
 
-  echo '<script type="text/javascript">alert("Modification de vos préférences effectuée avec succès!!");window.location = "settings.php";</script>';
-}
+    echo '<script type="text/javascript">alert("Modification de vos préférences effectuée avec succès!!");window.location = "settings.php";</script>';
+  }
+
+ //*********Modification Ma description Personnelle*********
+
+ if (isset($_POST['btn_desc'])) {
+   $taille = $_POST['tailleUser'];
+   $teint = $_POST['teintUser'];
+   $morphologie = $_POST['morphUser'];
+   $commentaire = $_POST['commentaire'];
+
+   $req = $bdd->prepare("UPDATE description SET taille =?, teint =?, morphologie =?, commentaire =? WHERE id_description=?");
+   $req->execute([$taille,$teint,$morphologie,$commentaire,$user->id_description]);
+
+   echo '<script type="text/javascript">alert("Modification effectuée avec succès!!");window.location = "settings.php";</script>';
+ }
+
+
 
 
  ?>
@@ -178,24 +202,20 @@ if(isset($_POST['btn_pref'])){
                     <select  name="sexeMatch" onchange="save(3);">
                         <option selected value="<?php echo $critere['sexe']; ?>"><?php echo $critere['sexe']; ?></option>
                         <?php
-                          if ($critere['sexe']=="Femme") {
-                            ?>
-                            <option value="Homme">Homme</option>
-                            <option value="Inconnu">Autre ...</option>
+                          $tab = array('Homme', 'Femme', 'Inconnu');
+                          $element = $critere['sexe'];
+                          if(in_array($element,$tab)){
+                            unset($tab[array_search($element, $tab)]);
+                            foreach ($tab as $tab_element) {
+                              ?>
+                              <option value="<?php echo($tab_element);?>"><?php echo($tab_element=='Inconnu') ? 'Autre...': $tab_element;?></option>
                             <?php
-                        }
-                        elseif($critere['sexe']=="Homme"){
-                          ?>
-                          <option value="Femme">Femme</option>
-                          <option value="Inconnu">Autre ...</option>
+                            }
+                            ?>
                         <?php
-                        }else {
-                          ?>
-                          <option value="Femme">Femme</option>
-                          <option value="Homme">Homme</option>
-                          <?php
                         }
-                         ?>
+                        ?>
+
                     </select>
                   </div>
 
@@ -203,22 +223,22 @@ if(isset($_POST['btn_pref'])){
                     <!-- Age -->
                     <label>Tranche d'age recherchée :</label>
                     <select id="ageMatch_deb" name="ageMatch_deb" onchange="sendvalue('ageMatch_deb','ageMatch_fin');save(3)">
-                      <option value="<?php echo $critere['age_deb']; ?>" selected disabled><?php echo $critere['age_deb']; ?></option>
+                      <option value="<?php echo $critere['age_deb']; ?>" selected ><?php echo $critere['age_deb']; ?></option>
                     </select>
                     <label for="ageeMatch_fin">&nbsp&nbspà&nbsp&nbsp</label>
                     <select id="ageMatch_fin" name="ageMatch_fin" onchange="save(3)" >
-                      <option value="<?php echo $critere['age_fin']; ?>" selected disabled><?php echo $critere['age_fin']; ?></option>
+                      <option value="<?php echo $critere['age_fin']; ?>" selected><?php echo $critere['age_fin']; ?></option>
                     </select>
                   </div>
                   <!-- Taille -->
                   <div class="line">
                     <label>Taille (cm) comprise entre :</label>
                     <select  id="tailleMatch_deb" name="tailleMatch_deb" onchange="sendvalue('tailleMatch_deb','tailleMatch_fin');save(3)">
-                        <option value="<?php echo $critere['taille_deb']; ?>" selected disabled><?php echo $critere['taille_deb']; ?></option>
+                        <option value="<?php echo $critere['taille_deb']; ?>" selected><?php echo $critere['taille_deb']; ?></option>
                     </select>
                     <label for="tailleMatch_fin">&nbspet&nbsp</label>
                     <select id="tailleMatch_fin" name="tailleMatch_fin" onchange="save(3)">
-                        <option value="<?php echo $critere['taille_fin']; ?>" selected disabled><?php echo $critere['taille_fin']; ?></option>
+                        <option value="<?php echo $critere['taille_fin']; ?>" selected><?php echo $critere['taille_fin']; ?></option>
                     </select>
                   </div>
                   <!-- Teint & Morphologie -->
@@ -229,21 +249,44 @@ if(isset($_POST['btn_pref'])){
                   <div class="line">
                     <label for="teintMatch">Teint</label>
                     <select id="teintMatch" name="teintMatch" onchange="save(3)">
-                      <option value="<?php echo $critere['teint']; ?>" selected disabled><?php  echo($critere['teint'] == null) ? 'Sans importance' :$critere['teint']; ?></option>
-                        <option value="Clair">Clair</option>
-                        <option value="Noir">Noir</option>
-                        <option value="Bronze">Bronzé</option>
-                        <option value="null">Sans importance</option>
+                      <option value="<?php echo $critere['teint']; ?>" selected><?php  echo($critere['teint'] == null) ? 'Sans importance' :$critere['teint']; ?></option>
+                      <?php
+                        $tab = array(null, 'Clair', 'Noir','Bronze');
+                        $element = $critere['teint'];
+                        if(in_array($element,$tab)){
+                          unset($tab[array_search($element, $tab)]);
+                          foreach ($tab as $tab_element) {
+                            ?>
+                            <option value="<?php echo($tab_element== null) ? 'null' :$tab_element;?>"><?php echo($tab_element== null) ? 'Sans importance' :$tab_element;?></option>
+                          <?php
+                          }
+                          ?>
+                      <?php
+                      }
+                      ?>
+
                     </select>
                   </div>
                   <!-- Morphologie profil recherché -->
                   <div class="line">
                     <label for="morphMatch">Morphologie</label>
                     <select id="morphMatch" name="morphMatch" onchange="save(3)">
-                        <option value="<?php echo $critere['morphologie']; ?>" selected disabled><?php  echo($critere['morphologie'] == null) ? 'Sans importance' :$critere['morphologie']; ?></option>
-                        <option value="Mince">Mince</option>
-                        <option value="Gros">Gros</option>
-                        <option value="null">Sans importance</option>
+                        <option value="<?php echo $critere['morphologie']; ?>" selected ><?php  echo($critere['morphologie'] == null) ? 'Sans importance' :$critere['morphologie']; ?></option>
+                        <?php
+                          $tab = array(null, 'Mince', 'Gros','Autre');
+                          $element = $critere['morphologie'];
+                          if(in_array($element,$tab)){
+                            unset($tab[array_search($element, $tab)]);
+                            foreach ($tab as $tab_element) {
+                              ?>
+                              <option value="<?php echo($tab_element== null) ? 'null' :$tab_element;?>"><?php echo($tab_element== null) ? 'Sans importance' :$tab_element;?></option>
+                            <?php
+                            }
+                            ?>
+                        <?php
+                        }
+                        ?>
+
                     </select>
                   </div>
                   <!-- Nationalité & Réligion -->
@@ -253,23 +296,48 @@ if(isset($_POST['btn_pref'])){
                       <!-- Nationalité -->
                   <div class="line">
                     <label for="">Nationalité:</label>
-                    <select class="" name="nationaliteMatch" onchange="save(3);">
-                      <option value="<?php echo $critere['nationalite']; ?>" selected disabled><?php  echo($critere['nationalite'] == null) ? 'Sans importance' :getNationalite($critere['nationalite']); ?></option>
-                      <option value="null">Sans importance</option>
+                    <select class="" name="nationaliteMatch" onchange="save(3)">
+                      <option value="<?php echo ($critere['nationalite'] == null) ? 'null' :$$critere['nationalite']; ?>" selected ><?php  echo($critere['nationalite'] == null) ? 'Sans importance' :getNationalite($critere['nationalite']); ?></option>
                       <?php include '../inscription/pays.php'; ?>
                     </select>
                   </div>
                     <!--Réligion -->
                   <div class="line">
                     <label for="religion">Religion:</label>
-                    <select name="religionMatch" onchange="save(3);">
-                        <option value="<?php echo $critere['religion']; ?>" selected disabled><?php  echo($critere['religion'] == null) ? 'Sans importance' :$critere['religion']; ?></option>
-                        <option value="null">Sans importance</option>
+                    <select name="religionMatch" onchange="save(3)">
+                        <option value="<?php echo $critere['religion']; ?>" selected ><?php  echo($critere['religion'] == null) ? 'Sans importance' :$critere['religion']; ?></option>
+                        <?php
+
+
+
+                          $tab = array(null, 'Judaisme', 'Christianisme', 'Islam', 'Boudhisme','Inconnue');
+                          $element = $critere['religion'];
+                          if(in_array($element,$tab)){
+                            unset($tab[array_search($element, $tab)]);
+                            foreach ($tab as $tab_element) {
+                              ?>
+                              <option value="<?php echo($tab_element== null) ? 'null' :$tab_element;?>">
+                                <?php
+                                  if ($tab_element==null)
+                                    echo ('Sans Importance');
+                                  elseif ($tab_element=='Inconnue')
+                                    echo ('Autre...');
+                                  else
+                                    echo ($tab_element);
+                                ?>
+                              </option>
+                            <?php
+                            }
+                            ?>
+                        <?php
+                        }
+                        ?>
+                        <!-- <option value="null">Sans importance</option>
                         <option value="Judaisme">Judaisme</option>
                         <option value="Christianisme">Christianisme</option>
                         <option value="Islam">Islam</option>
                         <option value="Boudhisme">Boudhisme</option>
-                        <option value="Inconnue">Autre..</option>
+                        <option value="Inconnue">Autre..</option> -->
                     </select>
                   </div>
 
@@ -287,44 +355,67 @@ if(isset($_POST['btn_pref'])){
                 <div class="description">
                   <h2>Description Personnelle</h2>
                 </div>
-                <form class="" action="index.html" method="post" name="form_desc" id="from_desc">
+                <form class="" action="settings.php" method="post" name="form_desc" id="from_desc">
 
                   <!-- Taille User -->
                   <div class="line">
 
-                    <select id="tailleUser" name="tailleUser" onchange="save(3)">
-                        <option value="" selected disabled>Votre taille (cm)</option>
+                    <select id="tailleUser" name="tailleUser" onchange="save(4);">
+                        <option value="<?php echo $description['taille']; ?>" selected><?php echo $description['taille']; ?>  (cm)</option>
                     </select>
                   </div>
                   <!-- Teint User -->
                   <div class="line">
 
-                    <select id="teintUser" name="teintUser" onchange="save(3)">
-                        <option value="" selected disabled>Votre teint</option>
-                        <option value="Clair">Clair</option>
-                        <option value="Noir">Noir</option>
-                        <option value="Bronze">Bronzé</option>
+                    <select id="teintUser" name="teintUser" onchange="save(4);">
+                        <option value="<?php echo $description['teint']; ?>" selected><?php echo $description['teint']; ?> (Mon teint)</option>
+                        <?php
+                          $tab = array('Noir', 'Clair', 'Bronze');
+                          $element = $description['teint'];
+                          if(in_array($element,$tab)){
+                            unset($tab[array_search($element, $tab)]);
+                            foreach ($tab as $tab_element) {
+                              ?>
+                              <option value="<?php echo($tab_element);?>"><?php echo($tab_element);?></option>
+                            <?php
+                            }
+                            ?>
+                        <?php
+                        }
+                        ?>
                     </select>
                   </div>
                   <!-- Morphologie User -->
                   <div class="line">
 
-                    <select id="morphUser" name="morphUser" onchange="save(3)">
-                        <option value="" selected disabled>Votre morphologie</option>
-                        <option value="Mince">Mince</option>
-                        <option value="Gros">Gros</option>
-                        <option value="Autre">Autre ...</option>
+                    <select id="morphUser" name="morphUser" onchange="save(4)">
+                        <option value="<?php echo $description['morphologie']; ?>" selected ><?php echo $description['morphologie']; ?> (Ma morphologie)</option>
+                        <?php
+                          $tab = array('Mince', 'Gros', 'Autre');
+                          $element = $description['morphologie'];
+                          if(in_array($element,$tab)){
+                            unset($tab[array_search($element, $tab)]);
+                            foreach ($tab as $tab_element) {
+                              ?>
+                              <option value="<?php echo($tab_element);?>"><?php echo($tab_element=='Autre') ? 'Autre...': $tab_element;?></option>
+                            <?php
+                            }
+                            ?>
+                        <?php
+                        }
+                        ?>
+
                     </select>
                   </div>
 
                   <!-- Info supplémentaires  User -->
                   <div class="line">
-                    <textarea name="name" rows="8" cols="80" placeholder="Informations supllémentaires"></textarea>
+                    <textarea name="commentaire" rows="8" cols="80" placeholder="Informations supllémentaires" value="<?php echo $description['commentaire']; ?>" onchange="save(4);"><?php echo $description['commentaire']; ?></textarea>
                   </div>
 
                   <div class="line">
-                    <input type="submit" name="" value="Sauvegarder" disabled id="btn_pref">
-                    <input type="reset" name="" value="Annuler" id="btn_pref_annuler" onclick="javascript:document.getElementById('btn_pref').disabled = true;this.style.display='none';">
+                    <input type="submit" name="btn_desc" value="Sauvegarder" disabled id="btn_desc">
+                    <input type="reset" name="" value="Annuler" id="btn_desc_annuler" onclick="javascript:document.getElementById('btn_desc').disabled = true;this.style.display='none';">
                   </div>
                 </form>
               </div>
@@ -387,25 +478,62 @@ if(isset($_POST['btn_pref'])){
         }
         function save(n){
           var x = document.querySelectorAll('#form_mdp input[type="password"]');
-          var y = document.querySelectorAll('#form_pref select,input[type="text"]');
-          if (n==1) {
-            document.getElementById('btn_mail').disabled = !document.getElementById('btn_mail').disabled;
-          }else if(n==2) {
-            if (x[0].value != x[1].value) {
-              if(x[1].value ==""){
-                document.getElementById('btn_mdp').disabled = true;
+          // var y = document.querySelectorAll('#form_pref select,input[type="text"]');
+          // var z = document.querySelectorAll('#form_desc select,textarea');
+          switch (n) {
+            case 1:
+              document.getElementById('btn_mail').disabled = !document.getElementById('btn_mail').disabled;
+              break;
+            case 2:
+              if (x[0].value != x[1].value) {
+                if(x[1].value ==""){
+                  document.getElementById('btn_mdp').disabled = true;
+                }else {
+                  console.log(x[0].value+','+x[1].value);
+                  alert("Les deux champs ne correspondent pas!!");
+                  document.getElementById('btn_mdp').disabled = true;
+                }
               }else {
-                console.log(x[0].value+','+x[1].value);
-                alert("Les deux champs ne correspondent pas!!");
-                document.getElementById('btn_mdp').disabled = true;
+                document.getElementById('btn_mdp').disabled = false;
               }
-            }else {
-              document.getElementById('btn_mdp').disabled = false;
-            }
-          }else {
-            document.getElementById('btn_pref').disabled = false;
-            document.getElementById('btn_pref_annuler').style.display = "block";
+              break;
+            case 3:
+              document.getElementById('btn_pref').disabled = false;
+              document.getElementById('btn_pref_annuler').style.display = "block";
+              break;
+            case 4:
+              document.getElementById('btn_desc').disabled = !document.getElementById('btn_desc').disabled;
+              document.getElementById('btn_desc_annuler').style.display = "block";
+              break;
+            default:
+
           }
+        //   if (n==1) {
+        //     document.getElementById('btn_mail').disabled = !document.getElementById('btn_mail').disabled;
+        //   }else if(n==2) {
+        //     if (x[0].value != x[1].value) {
+        //       if(x[1].value ==""){
+        //         document.getElementById('btn_mdp').disabled = true;
+        //       }else {
+        //         console.log(x[0].value+','+x[1].value);
+        //         alert("Les deux champs ne correspondent pas!!");
+        //         document.getElementById('btn_mdp').disabled = true;
+        //       }
+        //     }else {
+        //       document.getElementById('btn_mdp').disabled = false;
+        //     }
+        //   }else {
+        //     document.getElementById('btn_pref').disabled = false;
+        //     document.getElementById('btn_pref_annuler').style.display = "block";
+        //   }
+        // }
+        // switch (n) {
+        //   case n == 4:
+        //       document.getElementById('btn_desc').disabled = !document.getElementById('btn_desc').disabled;
+        //       document.getElementById('btn_desc_annuler').style.display = "block";
+        //     break;
+        //   default:
+        //
         }
       </script>
       </body>

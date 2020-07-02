@@ -268,14 +268,19 @@ textarea{
   color: white;
   display: block;
 }
-#info input[type ="submit"]{
-  margin-top: 10px;
-  background-color: blue;
-  margin-left: 30%;
-  margin-right: 30%;
-  width: 40%;
+#info .btn_valider{
+  background-color: rgb(62, 120, 187);
   display: none;
 }
+#info .btn_valider:disabled{
+  background-color: grey;
+}
+
+#info .btn_annuler{
+  background-color: rgb(79, 187, 62);
+  display: none;
+}
+
 
 
 

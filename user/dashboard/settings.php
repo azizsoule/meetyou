@@ -307,9 +307,6 @@
                     <select name="religionMatch" onchange="save(3)">
                         <option value="<?php echo $critere['religion']; ?>" selected ><?php  echo($critere['religion'] == null) ? 'Sans importance' :$critere['religion']; ?></option>
                         <?php
-
-
-
                           $tab = array(null, 'Judaisme', 'Christianisme', 'Islam', 'Boudhisme','Inconnue');
                           $element = $critere['religion'];
                           if(in_array($element,$tab)){
@@ -332,12 +329,7 @@
                         <?php
                         }
                         ?>
-                        <!-- <option value="null">Sans importance</option>
-                        <option value="Judaisme">Judaisme</option>
-                        <option value="Christianisme">Christianisme</option>
-                        <option value="Islam">Islam</option>
-                        <option value="Boudhisme">Boudhisme</option>
-                        <option value="Inconnue">Autre..</option> -->
+
                     </select>
                   </div>
 
@@ -478,8 +470,6 @@
         }
         function save(n){
           var x = document.querySelectorAll('#form_mdp input[type="password"]');
-          // var y = document.querySelectorAll('#form_pref select,input[type="text"]');
-          // var z = document.querySelectorAll('#form_desc select,textarea');
           switch (n) {
             case 1:
               document.getElementById('btn_mail').disabled = !document.getElementById('btn_mail').disabled;
@@ -508,32 +498,7 @@
             default:
 
           }
-        //   if (n==1) {
-        //     document.getElementById('btn_mail').disabled = !document.getElementById('btn_mail').disabled;
-        //   }else if(n==2) {
-        //     if (x[0].value != x[1].value) {
-        //       if(x[1].value ==""){
-        //         document.getElementById('btn_mdp').disabled = true;
-        //       }else {
-        //         console.log(x[0].value+','+x[1].value);
-        //         alert("Les deux champs ne correspondent pas!!");
-        //         document.getElementById('btn_mdp').disabled = true;
-        //       }
-        //     }else {
-        //       document.getElementById('btn_mdp').disabled = false;
-        //     }
-        //   }else {
-        //     document.getElementById('btn_pref').disabled = false;
-        //     document.getElementById('btn_pref_annuler').style.display = "block";
-        //   }
-        // }
-        // switch (n) {
-        //   case n == 4:
-        //       document.getElementById('btn_desc').disabled = !document.getElementById('btn_desc').disabled;
-        //       document.getElementById('btn_desc_annuler').style.display = "block";
-        //     break;
-        //   default:
-        //
+
         }
       </script>
       </body>

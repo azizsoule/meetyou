@@ -342,17 +342,12 @@
                       <input  type="text"  name="tel" id="" placeholder="Telephone" disabled value="<?php echo $user->telephone ;?>"  onchange="dis();">
 
                       <select name="pays" disabled onchange="dis();">
-                          <option selected value="<?php echo $user->id_pays ;?>" ><?php echo getNationalite($user->id_pays),$user->id_pays ;?>(Pays de Residence)</option>
-                          <option value="">Element 1</option>
-                          <option value="">Element 2</option>
-                          <option value="">Element 3</option>
+                          <option selected value="<?php echo $user->id_pays ;?>"><?php echo getNationalite($user->id_pays),$user->id_pays ;?>(Pays de Residence)</option>
                       </select>
 
                       <select name="ville" disabled  onchange="dis();">
                           <option selected value="<?php echo $user->id_ville ;?>"><?php echo getVille($user->id_ville) ;?>(Ville de Residence)</option>
-                          <option value="">Element 1</option>
-                          <option value="">Element 2</option>
-                          <option value="">Element 3</option>
+
                       </select>
 
                       <input  type="text" disabled name="profession" id="" placeholder="Profession" value="<?php echo $user->profession ;?>"  onchange="dis();">

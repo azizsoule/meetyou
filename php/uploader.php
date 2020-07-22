@@ -47,18 +47,15 @@
             header("location: ../user/dashboard");
           } else {
             unlink($target_file);
-            header("location: ../user/dashboard");
           }
 
         } else {
           echo "Sorry, there was an error uploading your file.";
-          header("location: ../user/dashboard");
         }
       }
       // Check if $uploadOk is set to false by an error
       else {
         echo "Sorry, your file was not uploaded.";
-        header("location: ../user/dashboard");
       }
 
     } else {

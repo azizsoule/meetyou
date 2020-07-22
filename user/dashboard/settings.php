@@ -522,6 +522,8 @@ if (isset($_POST['btn_ci'])) {
                   alert("Les deux champs ne correspondent pas!!");
                   document.getElementById('btn_mdp').disabled = true;
                 }
+              }else if(x[0].value ==""){
+                document.getElementById('btn_mdp').disabled = true;
               }else {
                 document.getElementById('btn_mdp').disabled = false;
               }

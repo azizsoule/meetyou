@@ -103,7 +103,14 @@
    echo '<script type="text/javascript">alert("Modification effectuée avec succès!!");window.location = "settings.php";</script>';
  }
 
+//*********Modification Mes centres d'intérêts*********
 
+if (isset($_POST['btn_ci'])) {
+  $ci = implode(',',$_POST['ci']);
+  $req = $bdd->prepare("UPDATE centre_interet SET ci =? WHERE id_ci=?");
+  $req->execute([$ci,$user->id_ci]);
+  echo '<script type="text/javascript">alert("Modification effectuée avec succès!!");window.location = "settings.php";</script>';
+}
 
 
  ?>
@@ -419,11 +426,43 @@
                 <div class="description">
                   <h2>Mes centres d'intérêt</h2>
                 </div>
-                <form class="" action="index.html" method="post" name="form_ci" id="from_ci">
+                <form class="" action="settings.php" method="post" name="form_ci" id="form_ci">
+                  <div class="container_ci">
+                    <ul class="ci" onchange="save(5);">
+                      <?php
 
+                        $bdd = Database::connect();
+                        $req = $bdd->prepare("SELECT * FROM centre_interet WHERE id_ci=?");
+                        $req->execute([$user->id_ci]);
+
+                        $ci_user = $req->fetch();
+                        $ci_user = explode(',',$ci_user['ci']);
+
+                        $req1 = $bdd->prepare("SELECT * FROM liste_centre_interet");
+                        $req1->execute();
+
+                        $liste_ci = [];
+                        while ($data = $req1->fetch()) {
+                          array_push($liste_ci,$data['ci']);
+                        }
+
+                        foreach ($liste_ci as $element) {
+                          if (in_array($element,$ci_user)) {
+                              echo "<li><input type='checkbox' name ='ci[]' id='{$element}' value='{$element}' checked><label for='{$element}'>{$element}</label></li>";
+                            }else {
+                              echo "<li><input type='checkbox' name ='ci[]' id='{$element}' value='{$element}'><label for='{$element}'>{$element}</label></li>";
+                            }
+
+                        }
+
+                        $bdd = Database::disconnect();
+
+                       ?>
+                    </ul>
+                </div>
                   <div class="line">
-                    <input type="submit" name="" value="Sauvegarder" disabled id="btn_pref">
-                    <input type="reset" name="" value="Annuler" id="btn_pref_annuler" onclick="javascript:document.getElementById('btn_pref').disabled = true;this.style.display='none';">
+                    <input type="submit" name="btn_ci" value="Sauvegarder" disabled id="btn_ci">
+                    <input type="reset" name="" value="Annuler" id="btn_ci_annuler" onclick="javascript:document.getElementById('btn_ci').disabled = true;this.style.display='none';">
                   </div>
                 </form>
               </div>
@@ -496,6 +535,24 @@
               document.getElementById('btn_desc_annuler').style.display = "block";
               break;
             default:
+            valid = true;
+            y = document.querySelectorAll('#form_ci input[type="checkbox"]');
+            var j=0;
+            for (i = 0; i < y.length ; i++) {
+              if (y[i].checked == true) {
+                j++;
+              }
+            }
+            if (j < 5) {
+              valid = false;
+              alert("Veuillez choisir au moins 5(cinq) centres d'intérêt svp!");
+            }
+            if (valid) {
+              document.getElementById('btn_ci').disabled = false;
+              document.getElementById('btn_ci_annuler').style.display = "block";
+            }else {
+              document.getElementById('btn_ci').disabled = true;
+            }
 
           }
 

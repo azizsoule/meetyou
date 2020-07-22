@@ -8,6 +8,8 @@ TACHES A REALISER :
 -Partie centre d'intérets afficher les ci (disabled) --> ok
 -Fonction getMatch()---> ok
 -Ajouter bouton dans la partie profil --> ok
+-Gerer le volet pré-discussion de la partie messagerie --> ok
+-Gérer l'image de profil --> ok
 
 -Infos a afficher sur le profil :
   (user)
@@ -38,6 +40,4 @@ TACHES A REALISER :
 A gerer plus tard
   -Ameliorer Design div sender(partie message)
   -Statut de la personne personne connectée
-  -Gerer la partie administrateur
-  -Gérer l'image de profil et le l'image de cover
-  -Gerer le volet pré-discussion de la partie messagerie;
+  -Gérer l'image de cover

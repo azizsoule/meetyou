@@ -32,6 +32,7 @@ body {
   padding-bottom: 5px;
   background-color: white;
 }
+
 .pp .ico-value{
   top: -305px;
   position: relative;
@@ -43,6 +44,41 @@ body {
   color: white;
   font-weight: bold;
 }
+
+.picture-change{
+  border-radius: 3px;
+  border-radius: 8px;
+  padding: 10px;
+  color: white;
+  border: none;
+  background-color: rgba(99, 96, 96, 0.5);
+  font-size: 15px;
+  font-weight: bold;
+  box-shadow: 1px 1px 10px 3px rgba(0, 0, 255, .2);
+  height: 50px;
+  transform: translate(50%,250%);
+  position: relative;
+}
+
+.picture-change input[type='submit'] {
+  border-radius: 3px;
+  padding: 10px;
+  color: white;
+  border: none;
+  background-color: rgb(56, 165, 97);
+  font-size: 15px;
+  font-weight: bold;
+  box-shadow: 1px 1px 10px 3px rgba(0, 0, 255, .2);
+  height: 50px;
+}
+
+.picture-change p{
+  float: right;
+  margin: 0;
+  padding-top: 5px;
+  padding-left:5px;
+}
+
 .pp .ico-value h4{
   font-weight: normal;
 }
@@ -86,6 +122,7 @@ body {
 .pp img{
   height: 300px;
   width: 300px;
+  object-fit: cover;
 }
 
 /* Style the tab */

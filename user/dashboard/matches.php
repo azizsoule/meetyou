@@ -84,41 +84,79 @@
           foreach ($matchs as $match) {
               $taux =round($match->taux, 0);
               $age = age($match->date_naissance);
-            echo'
+            if ($match->photo == null) {
+              echo'
 
-            <div class="content profil" >
-              <div class="container">
-                <div class="photo">
-                  <!-- Photo matches -->
-                  <img src="../../images/user.webp">
-                </div>
-                <div class="info_match">
-                  <!-- Nom matches -->
-                  <h2>'.$match->nom.',&nbsp'.$age.'&nbsp&nbsp<span>taux = '.$taux.'</span></h2>
-                  <div class="line">
-                    <div class="ic-job"></div>
-                    <!-- Emploi matches -->
-                    <label class="label-10">'.$match->profession.'</label>
+              <div class="content profil" >
+                <div class="container">
+                  <div class="photo">
+                    <!-- Photo matches -->
+                    <img src="../../images/user.webp">
                   </div>
-                  <br>
-                  <div class="line">
-                    <div class="ic-lieu"></div>
-                    <!-- Lieu de residence -->
-                    <label class="label-10">'.getNationalite($match->id_pays).','.getVille($match->id_ville).'</label>
-                  </div>
-                  <div class="line">
-                    <button class="btn" type="button" name="btn_msg" onclick=""><a style="color:white;" href="../../php/discussion.php?id='.$match->id.'" ><div class="ic-msg"><p>Envoyer un message</p></div></a></button>
-                    <button class="btn blue" type="button" name="btn_profil" onclick="" ><a style="color:white;" href=profil.php?id='.$match->id.'&taux='.$taux.'><div class="ic-profil"><p>Voir le profil</p></div></a></button>
-                  </div>
+                  <div class="info_match">
+                    <!-- Nom matches -->
+                    <h2>'.$match->nom.',&nbsp'.$age.'&nbsp&nbsp<span>taux = '.$taux.'</span></h2>
+                    <div class="line">
+                      <div class="ic-job"></div>
+                      <!-- Emploi matches -->
+                      <label class="label-10">'.$match->profession.'</label>
+                    </div>
+                    <br>
+                    <div class="line">
+                      <div class="ic-lieu"></div>
+                      <!-- Lieu de residence -->
+                      <label class="label-10">'.getNationalite($match->id_pays).','.getVille($match->id_ville).'</label>
+                    </div>
+                    <div class="line">
+                      <button class="btn" type="button" name="btn_msg" onclick=""><a style="color:white;" href="../../php/discussion.php?id='.$match->id.'" ><div class="ic-msg"><p>Envoyer un message</p></div></a></button>
+                      <button class="btn blue" type="button" name="btn_profil" onclick="" ><a style="color:white;" href=profil.php?id='.$match->id.'&taux='.$taux.'><div class="ic-profil"><p>Voir le profil</p></div></a></button>
+                    </div>
 
+                  </div>
+                  <!--<div class="photo taux">
+                    <img src="../../images/gif/heart2.gif">
+                  </div> -->
                 </div>
-                <!--<div class="photo taux">
-                  <img src="../../images/gif/heart2.gif">
-                </div> -->
               </div>
-            </div>
 
-            ';
+              ';
+            } else {
+              echo'
+
+              <div class="content profil" >
+                <div class="container">
+                  <div class="photo">
+                    <!-- Photo matches -->
+                    <img src="../../images/profiles/'.$match->photo.'">
+                  </div>
+                  <div class="info_match">
+                    <!-- Nom matches -->
+                    <h2>'.$match->nom.',&nbsp'.$age.'&nbsp&nbsp<span>taux = '.$taux.'</span></h2>
+                    <div class="line">
+                      <div class="ic-job"></div>
+                      <!-- Emploi matches -->
+                      <label class="label-10">'.$match->profession.'</label>
+                    </div>
+                    <br>
+                    <div class="line">
+                      <div class="ic-lieu"></div>
+                      <!-- Lieu de residence -->
+                      <label class="label-10">'.getNationalite($match->id_pays).','.getVille($match->id_ville).'</label>
+                    </div>
+                    <div class="line">
+                      <button class="btn" type="button" name="btn_msg" onclick=""><a style="color:white;" href="../../php/discussion.php?id='.$match->id.'" ><div class="ic-msg"><p>Envoyer un message</p></div></a></button>
+                      <button class="btn blue" type="button" name="btn_profil" onclick="" ><a style="color:white;" href=profil.php?id='.$match->id.'&taux='.$taux.'><div class="ic-profil"><p>Voir le profil</p></div></a></button>
+                    </div>
+
+                  </div>
+                  <!--<div class="photo taux">
+                    <img src="../../images/gif/heart2.gif">
+                  </div> -->
+                </div>
+              </div>
+
+              ';
+            }
         }
         ?>
 
@@ -143,7 +181,7 @@
               <div class="line">
                 <button class="btn" type="button" name="btn_msg"><div class="ic-msg"><p>Envoyer un message</p></div></button>
                 <button class="btn blue" type="button" name="btn_profil" ><div class="ic-profil"><p>Voir le profil</p></div></button>
-              </div>
+              </div>condition
 
             </div>
           </div>

@@ -145,7 +145,7 @@
           <div class="pp-container">
             <div class="pp">
 
-              <img src="../../images/main3.png" alt="">
+              <img src=<?php echo ($user->photo == null) ? "../../images/user.webp" : "../../images/profiles/".$user->photo ;?> alt="Photo de profil">
               <!-- Mettre le taux de compatibilité ici dans la div de class="icons" -->
               <?php
 
@@ -153,7 +153,7 @@
                   ?>
 
                   <div class="ico-value">
-                    <div class="icons"><img src="../../images/icons/icons8-coeur-match-50.png" alt=""><?php echo $_GET['taux']; ?></div><!-- Mettre ici là ou il ya 80 -->
+                    <div title="" class="icons"><img src="../../images/icons/icons8-coeur-match-50.png" alt=""><?php echo $_GET['taux']; ?></div><!-- Mettre ici là ou il ya 80 -->
                   </div>
 
                   <?php
@@ -180,6 +180,17 @@
               ?>
 
                 <button class="btn" type="button" name="btn_msg" onclick=""><a style="color:white;" href="../../php/discussion.php?id=<?php echo $_GET['id']; ?>" ><div class="ic-msg"><p>Envoyer un message</p></div></a></button>
+
+              <?php
+            }else {
+              ?>
+
+              <div class="picture-change">
+                <form enctype="multipart/form-data" action="../../php/uploader.php" method="post">
+                  <input type="file" name="picture" id="picture" value="Charger une image">
+                  <input type="submit" name="changePic" value="Changer la pp">
+                </form>
+              </div>
 
               <?php
             }

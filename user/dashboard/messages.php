@@ -58,26 +58,45 @@
                 $id_r = $discussion['id_individu1'];
               }
 
-              $req2 = $bdd->prepare("SELECT nom,prenoms FROM individu WHERE id=?");
+              $req2 = $bdd->prepare("SELECT nom,prenoms,photo FROM individu WHERE id=?");
               $req2->execute([$id_r]);
 
               $nomPrenom = $req2->fetch();
 
-              echo "
+              if ($nomPrenom['photo'] == null) {
+                echo "
 
-              <a href='?id_discussion={$discussion['id_discussion']}&id_receiver={$id_r}'>
-                <div class='container'>
-                  <div class='photo'>
-                    <img src='../../images/main3.png' alt='img'>
+                <a href='messages.php?id_discussion={$discussion['id_discussion']}&id_receiver={$id_r}'>
+                  <div class='container'>
+                    <div class='photo photo-msg'>
+                      <img src='../../images/user.webp' alt='img'>
+                    </div>
+                    <div class='cont-info'>
+                      <h4>{$nomPrenom['nom']} {$nomPrenom['prenoms']}</h4>
+                      <span>Message</span>
+                    </div>
                   </div>
-                  <div class='cont-info'>
-                    <h4>{$nomPrenom['nom']} {$nomPrenom['prenoms']}</h4>
-                    <span>Message</span>
-                  </div>
-                </div>
-              </a>
+                </a>
 
-              ";
+                ";
+              } else {
+                echo "
+
+                <a href='messages.php?id_discussion={$discussion['id_discussion']}&id_receiver={$id_r}'>
+                  <div class='container'>
+                    <div class='photo photo-msg'>
+                      <img src='../../images/profiles/".$nomPrenom['photo']."' alt='img'>
+                    </div>
+                    <div class='cont-info'>
+                      <h4>{$nomPrenom['nom']} {$nomPrenom['prenoms']}</h4>
+                      <span>Message</span>
+                    </div>
+                  </div>
+                </a>
+
+                ";
+              }
+
             }
 
            ?>

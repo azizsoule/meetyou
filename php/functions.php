@@ -133,17 +133,17 @@ function getVille($id){
 
 }
 
-// function ordonner($liste){
-//   for ($i=0; $i < count($liste)-1 ; $i++) {
-//     for ($j=$i; $j <count($liste); $j++) {
-//       if($liste[$i]->taux < $liste[$j]->taux){
-//         $temp = $liste[$i];
-//         $liste[$i] = $liste[$j];
-//         $liste[$j] = $temp;
-//       }
-//
-//     }
-//   }
-// }
+function ordonner($liste){
+  for ($i=0; $i < count($liste)-1 ; $i++) {
+    for ($j=$i; $j <count($liste); $j++) {
+      if($liste[$i]->taux < $liste[$j]->taux){
+        $temp = $liste[$i];
+        $liste[$i] = $liste[$j];
+        $liste[$j] = $temp;
+      }
+
+    }
+  }
+}
 
 ?>

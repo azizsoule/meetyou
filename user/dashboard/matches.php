@@ -9,6 +9,7 @@
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     $user->matches = getMatchs($user);
+    // ordonner($user->matches);
     $matchs = $user->matches;
     // echo("Taille = ".count($matchs));
   ?>

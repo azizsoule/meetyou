@@ -187,8 +187,8 @@
 
               <div class="picture-change">
                 <form enctype="multipart/form-data" action="../../php/uploader.php" method="post">
-                  <input type="file" name="picture" id="picture" value="Charger une image">
-                  <input type="submit" name="changePic" value="Changer la pp">
+                  <input type="file" name="picture" id="picture" value="Charger une image" onchange="dis2();">
+                  <input type="submit" name="changePic" id="changePic" value="Changer la pp" disabled>
                 </form>
               </div>
 
@@ -344,7 +344,7 @@
                       </select>
 
                       <select name="sexe" disabled  onchange="dis();">
-                          <option selected value="<?php echo $user->sexe ;?>"><?php echo $user->sexe ;?></option>
+                          <option selected value="<?php echo $user->sexe ;?>"><?php echo $user->sexe ;?>(sexe)</option>
                           <option value="Homme">Homme</option>
                           <option value="Femme">Femme</option>
                           <option value="Inconnu">Autre ...</option>
@@ -353,7 +353,7 @@
                       <input  type="text"  name="tel" id="" placeholder="Telephone" disabled value="<?php echo $user->telephone ;?>"  onchange="dis();">
 
                       <select name="pays" disabled onchange="dis();">
-                          <option selected value="<?php echo $user->id_pays ;?>"><?php echo getNationalite($user->id_pays),$user->id_pays ;?>(Pays de Residence)</option>
+                          <option selected value="<?php echo $user->id_pays ;?>"><?php echo getNationalite($user->id_pays) ;?>(Pays de Residence)</option>
                       </select>
 
                       <select name="ville" disabled  onchange="dis();">
@@ -364,7 +364,7 @@
                       <input  type="text" disabled name="profession" id="" placeholder="Profession" value="<?php echo $user->profession ;?>"  onchange="dis();">
 
                       <select name="religion" disabled  onchange="dis();">
-                          <option selected value="<?php echo $user->religion ;?>"><?php echo $user->religion ;?></option>
+                          <option selected value="<?php echo $user->religion ;?>"><?php echo $user->religion ;?>(religion)</option>
                           <option value="Judaisme">Judaisme</option>
                           <option value="Christianisme">Christianisme</option>
                           <option value="Islam">Islam</option>
@@ -455,6 +455,8 @@
 
         <script>
 
+          function dis2(){document.getElementById('changePic').disabled = false}
+
           function dis(){document.getElementById('btn_valider').disabled = false}
 
           function openTab(evt, option) {
@@ -498,6 +500,7 @@
         }
         // Get the element with id="defaultOpen" and click on it
         document.getElementById("defaultOpen").click();
+
       </script>
       </body>
 

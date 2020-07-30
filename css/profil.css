@@ -71,7 +71,9 @@ body {
   box-shadow: 1px 1px 10px 3px rgba(0, 0, 255, .2);
   height: 50px;
 }
-
+input[type='submit']:disabled{
+  background-color: grey;
+}
 .picture-change p{
   float: right;
   margin: 0;

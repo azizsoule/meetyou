@@ -1,0 +1,14 @@
+:root {
+  --translucide-grey : rgba(244, 241, 229,0.5);
+  --error-color : rgb(153, 35, 35);
+  --index-submit : rgba(0, 11, 32, 0.90);
+
+  /*old colors*/
+  --old-youmeet-blue : rgb(50, 49, 61);
+
+  /*new colors*/
+  --youmeet-blue-1 : #4dd0e1;
+  --youmeet-blue : #26c6da;
+  --youmeet-pink-1 : #f06292;
+  --youmeet-pink : #ff4e5b;
+}

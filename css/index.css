@@ -1,4 +1,5 @@
 @import "font.css";
+@import "colors.css";
 
 html body{
   margin: 0;
@@ -34,7 +35,7 @@ nav .header p span{
   margin-right: 110px;
   margin-top: -50px;
   font-size: 15px;
-  background-color: rgba(244, 241, 229,0.5);
+  background-color: var(--translucide-grey);
   border-radius: 0px 0px 10px 10px;
   border-style: solid;
 
@@ -49,7 +50,7 @@ nav .header p span{
     transform: translate(0%, -50%);
     box-shadow: 1px 1px 2.5px 1px grey;
     border-radius: 2.5px;
-    background-color: rgba(244, 241, 229,0.5);
+    background-color: var(--translucide-grey);
     display: grid;
     padding: 30px;
     border-radius: 10px;
@@ -62,7 +63,7 @@ nav .header p span{
     transform: translate(100%, -70%);
     box-shadow: 1px 1px 2.5px 1px grey;
     border-radius: 5px 0px 5px 5px;
-    background-color: rgba(244, 241, 229,0.5);
+    background-color: var(--translucide-grey);
     display: none;
     padding: 20px;
     animation: fadeIn 0.5s;
@@ -70,7 +71,7 @@ nav .header p span{
 }
 
 .error {
-  background-color: rgb(153, 35, 35);
+  background-color: var(--error-color);
   padding: 1px;
   color: white;
   font-weight: bold;
@@ -150,7 +151,7 @@ input[type="submit"]:disabled{
 
 
 input[type="submit"] {
-    background-color: rgba(0, 11, 32, 0.90);
+    background-color: var(--youmeet-pink);
     width: 100%;
     border-style: none;
     padding: 10px;
@@ -169,7 +170,7 @@ input[type="submit"]:hover {
 
 body{
   background-image: url(../images/main6.jpg);
-  background-size: cover;
+  background-size: auto;
   background-attachment: fixed;
 }
 

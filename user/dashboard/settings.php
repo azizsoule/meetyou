@@ -59,7 +59,7 @@
         $teintMatch = $_POST['teintMatch'];
         $tailleMatch_deb = $_POST['tailleMatch_deb'];
         $tailleMatch_fin = $_POST['tailleMatch_fin'];
-        $morphologieMatch = $_POST['morphologieMatch'];
+        $morphologieMatch = $_POST['morphMatch'];
         $nationaliteMatch = $_POST['nationaliteMatch'];
         $religionMatch = $_POST['religionMatch'];
 
@@ -307,7 +307,8 @@ if (isset($_POST['btn_ci'])) {
                   <div class="line">
                     <label for="">Nationalité:</label>
                     <select class="" name="nationaliteMatch" onchange="save(3)">
-                      <option value="<?php echo ($critere['nationalite'] == null) ? 'null' :$$critere['nationalite']; ?>" selected ><?php  echo($critere['nationalite'] == null) ? 'Sans importance' :getNationalite($critere['nationalite']); ?></option>
+                      <option value="null">Sans importance</option>
+                      <option value="<?php echo ($critere['nationalite'] == null) ? 'null' :$critere['nationalite']; ?>" selected ><?php  echo($critere['nationalite'] == null) ? 'Sans importance' :getNationalite($critere['nationalite']); ?></option>
                       <?php include '../inscription/pays.php'; ?>
                     </select>
                   </div>

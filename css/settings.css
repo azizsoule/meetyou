@@ -17,6 +17,7 @@ html,body{
   width: 100%;
 }
 
+
 #params{
   position: fixed;
   height: auto;
@@ -89,8 +90,23 @@ html,body{
   width: 230px;
 }
 .photo.taux{
-  height: 150px;
-  width: 200px;
+  padding-left: 25px;
+  padding-top: 25px;
+  height: 160px;
+  width: 160px;
+  /* border: 1px solid black; */
+}
+.photo.taux label{
+  /* border: 1px solid black; */
+  position: absolute;
+  font-size: 40px;
+  margin: 50px 0 0 50px;
+}
+.cl-green label{
+  color: green;
+}
+.cl-blue label{
+  color: blue;
 }
 
 .photo img{

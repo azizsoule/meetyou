@@ -94,9 +94,10 @@
                     <!-- Photo matches -->
                     <img src="../../images/user.webp">
                   </div>
+
                   <div class="info_match">
                     <!-- Nom matches -->
-                    <h2>'.$match->nom.',&nbsp'.$age.'&nbsp&nbsp<span>taux = '.$taux.'</span></h2>
+                    <h2>'.$match->nom.',&nbsp'.$age.'</h2>
                     <div class="line">
                       <div class="ic-job"></div>
                       <!-- Emploi matches -->
@@ -114,13 +115,39 @@
                     </div>
 
                   </div>
-                  <!--<div class="photo taux">
-                    <img src="../../images/gif/heart2.gif">
-                  </div> -->
+                  ';
+                  if ($taux >=80) {
+                    echo '
+                    <div class="photo taux">
+                      <label style="color:red;">'.$taux.'%</label>
+                      <img name="taux" src="../../images/he.jpg">
+                    </div>
+                  </div>
+                </div>
+
+                ';
+              }elseif ($taux >= 51) {
+                      echo '
+                      <div class="photo taux">
+                        <label style="color:#ee9a00;">'.$taux.'%</label>
+                        <img name="taux" src="../../images/he.jpg">
+                      </div>
+                    </div>
+                  </div>
+
+                  ';
+                }else {
+                  echo '
+                  <div class="photo taux">
+                    <label style="color:blue;">'.$taux.'%</label>
+                    <img name="taux" src="../../images/he.jpg">
+                  </div>
                 </div>
               </div>
 
               ';
+                }
+
             } else {
               echo'
 
@@ -132,7 +159,7 @@
                   </div>
                   <div class="info_match">
                     <!-- Nom matches -->
-                    <h2>'.$match->nom.',&nbsp'.$age.'&nbsp&nbsp<span>taux = '.$taux.'</span></h2>
+                    <h2>'.$match->nom.',&nbsp'.$age.'</h2>
                     <div class="line">
                       <div class="ic-job"></div>
                       <!-- Emploi matches -->
@@ -150,13 +177,39 @@
                     </div>
 
                   </div>
-                  <!--<div class="photo taux">
-                    <img src="../../images/gif/heart2.gif">
-                  </div> -->
+                  ';
+
+                  if ($taux >=80) {
+                    echo '
+                    <div class="photo taux">
+                      <label style="color:red;">'.$taux.'%</label>
+                      <img name="taux" src="../../images/he.jpg">
+                    </div>
+                  </div>
+                </div>
+
+                ';
+              }elseif ($taux >= 51) {
+                      echo '
+                      <div class="photo taux">
+                        <label style="color:#ee9a00;">'.$taux.'%</label>
+                        <img name="taux" src="../../images/he.jpg">
+                      </div>
+                    </div>
+                  </div>
+
+                  ';
+                }else {
+                  echo '
+                  <div class="photo taux">
+                    <label style="color:blue;">'.$taux.'%</label>
+                    <img name="taux" src="../../images/he.jpg">
+                  </div>
                 </div>
               </div>
 
               ';
+                }
             }
         }
         ?>

@@ -2,6 +2,7 @@
 
   include '../../config/Database.php';
   include '../../models/Individu.php';
+  include '../../name.php';
 
   session_start();
 
@@ -13,12 +14,12 @@
     <html lang="en" >
     <head>
       <meta charset="UTF-8">
-      <title>Messages</title>
+      <title><?php echo $name; ?> | Messages !</title>
       <link rel="stylesheet" href="../../css/messages.css">
       <script type="text/javascript" src="messaging/jquery/jquery.js"></script>
       <?php
 
-        if (isset($_GET['id_discussion']) && isset($_GET['id_receiver'])) {
+        if (isset($_GET['dis']) && isset($_GET['rec'])) {
           ?>
 
           <script type="text/javascript" src="messaging/js/get.js"></script>
@@ -66,7 +67,7 @@
               if ($nomPrenom['photo'] == null) {
                 echo "
 
-                <a href='messages.php?id_discussion={$discussion['id_discussion']}&id_receiver={$id_r}'>
+                <a href='messages.php?dis={$discussion['id_discussion']}&rec={$id_r}'>
                   <div class='container'>
                     <div class='photo photo-msg'>
                       <img src='../../images/user.webp' alt='img'>
@@ -82,7 +83,7 @@
               } else {
                 echo "
 
-                <a href='messages.php?id_discussion={$discussion['id_discussion']}&id_receiver={$id_r}'>
+                <a href='messages.php?dis={$discussion['id_discussion']}&rec={$id_r}'>
                   <div class='container'>
                     <div class='photo photo-msg'>
                       <img src='../../images/profiles/".$nomPrenom['photo']."' alt='img'>
@@ -108,7 +109,7 @@
       <!--Début Message-Box  -->
       <?php
 
-        if (isset($_GET['id_discussion']) && isset($_GET['id_receiver'])) {
+        if (isset($_GET['dis']) && isset($_GET['rec'])) {
           ?>
 
           <div class="msg-box">
@@ -117,7 +118,7 @@
               <?php
 
                 $req2 = $bdd->prepare("SELECT nom,prenoms FROM individu WHERE id=?");
-                $req2->execute([$_GET['id_receiver']]);
+                $req2->execute([$_GET['rec']]);
 
                 $nomPrenom = $req2->fetch();
 
@@ -134,8 +135,8 @@
               </div>
               <!-- Fin Corps de la discussion -->
             <form class="msg-send" method="post">
-              <input class="id_d" type="text" id="id_dis" name="id_discussion" value=<?php echo "{$_GET['id_discussion']}"; ?> hidden>
-              <input class="id_r" type="text" name="id_receiver" value=<?php echo "{$_GET['id_receiver']}"; ?> hidden>
+              <input class="id_d" type="text" id="id_dis" name="id_discussion" value=<?php echo "{$_GET['dis']}"; ?> hidden>
+              <input class="id_r" type="text" name="id_receiver" value=<?php echo "{$_GET['rec']}"; ?> hidden>
               <input class="msg" name="message" type="text" id="msg" placeholder="Ecrivez votre message ..." />
               <button type="submit" id="send"><img src="../../images/send1.png" alt="envoyer"></button>
             </form>

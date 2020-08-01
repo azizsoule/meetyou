@@ -6,7 +6,7 @@ require '../../../../models/Individu.php';
 $db = Database::connect();
 
 $requette = $db->prepare("SELECT * FROM `message` WHERE id_discussion=? ORDER BY date DESC");
-$requette->execute([$_GET['id_discussion']]);
+$requette->execute([$_GET['dis']]);
 
 session_start();
 

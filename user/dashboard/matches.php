@@ -20,7 +20,7 @@
       <title>
           <?php
               include("../../name.php");
-              echo $name." | Bienvenue chez vous !";
+              echo $name." | Profils compatibles !";
           ?>
       </title>
       <link rel="stylesheet" href="../../css/settings.css">

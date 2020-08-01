@@ -128,7 +128,7 @@
           <?php
 
               include("../../name.php");
-              echo $name." | Profil";
+              echo $name." | Mon Profil !";
 
           ?>
 

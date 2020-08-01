@@ -119,7 +119,10 @@ if (isset($_POST['btn_ci'])) {
     <html lang="fr" dir="ltr">
       <head>
         <meta charset="utf-8">
-        <title></title>
+        <title><?php
+            include("../../name.php");
+            echo $name." | Paramètres !";
+        ?></title>
         <link rel="stylesheet" href="../../css/settings.css">
       </head>
       <body>

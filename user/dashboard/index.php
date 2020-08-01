@@ -93,7 +93,7 @@
                   if ($nomPrenom['photo'] == null) {
                     echo "
 
-                    <a href='messages.php?id_discussion={$discussion['id_discussion']}&id_receiver={$id_r}'>
+                    <a href='messages.php?dis={$discussion['id_discussion']}&rec={$id_r}'>
                       <div class='container'>
                         <div class='photo photo-msg'>
                           <img src='../../images/user.webp' alt='img'>
@@ -109,7 +109,7 @@
                   } else {
                     echo "
 
-                    <a href='messages.php?id_discussion={$discussion['id_discussion']}&id_receiver={$id_r}'>
+                    <a href='messages.php?dis={$discussion['id_discussion']}&rec={$id_r}'>
                       <div class='container'>
                         <div class='photo photo-msg'>
                           <img src='../../images/profiles/".$nomPrenom['photo']."' alt='img'>

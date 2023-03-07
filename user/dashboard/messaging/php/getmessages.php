@@ -3,12 +3,12 @@
 require '../../../../config/Database.php';
 require '../../../../models/Individu.php';
 
+session_start();
+
 $db = Database::connect();
 
 $requette = $db->prepare("SELECT * FROM `message` WHERE id_discussion=? ORDER BY date DESC");
 $requette->execute([$_GET['dis']]);
-
-session_start();
 
 while ($message = $requette-> fetch()) {
 

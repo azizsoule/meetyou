@@ -3,11 +3,11 @@
   include '../config/Database.php';
   include '../models/Individu.php';
 
+  session_start();
+
   if (isset($_GET['id'])) {
 
     $bdd = Database::connect();
-
-    session_start();
 
     $req = $bdd->prepare("SELECT * FROM discussion WHERE (id_individu1=? and id_individu2=?) or (id_individu1=? and id_individu2=?)");
     $req->execute([$_SESSION['user']->id,$_GET['id'],$_GET['id'],$_SESSION['user']->id]);

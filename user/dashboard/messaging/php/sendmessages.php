@@ -3,11 +3,11 @@
   require '../../../../config/Database.php';
   require '../../../../models/Individu.php';
 
+  session_start();
+
   $db = Database::connect();
 
   if (!empty($_POST['message']) && trim($_POST['message'])!=""){
-
-    session_start();
 
     $id_discussion = $_POST['id_discussion'];
     $id_sender = $_SESSION['user']->id;

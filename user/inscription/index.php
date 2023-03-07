@@ -1,5 +1,7 @@
 <?php
 
+  session_start();
+
   include '../../config/Database.php';
 
   if (isset($_POST['mail_reg']) and isset($_POST['pwd_reg'])) {
@@ -16,8 +18,6 @@
       header('location: ../../?exist');
 
     } else {
-
-      session_start();
 
       $_SESSION['email'] = $_POST['mail_reg'];
       $_SESSION['password'] = $_POST['pwd_reg'];

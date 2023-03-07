@@ -3,9 +3,9 @@
   include '../models/Individu.php';
   include '../config/Database.php';
 
-  if(isset($_POST["changePic"])) {
+  session_start();
 
-    session_start();
+  if(isset($_POST["changePic"])) {
 
     if (isset($_SESSION['user'])) {
 

@@ -3,6 +3,8 @@
 	include '../config/Database.php';
 	include '../models/Individu.php';
 
+	session_start();
+
 	$bdd = Database::connect();
 
 	// to avoid XSS hacking; protect data of html and js scripts
@@ -17,15 +19,13 @@
 
 		if($data = $req -> fetch()) // if user exists
 		{
-			session_start();
-
 			$_SESSION['user'] = new Individu($data);
 			$_SESSION['user']->destroyPassword();
 
 			$req = $bdd->prepare("INSERT INTO connexion VALUES(?,?,?)");
 			$req->execute([null,$_SESSION['user']->id,date("Y-m-d H:i:s")]);
 
-			header('location: ../user/dashboard/'); // redirection to the user dashboard
+			header('location: ../user/dashboard/', false); // redirection to the user dashboard
 		}
 		else
 		{

@@ -155,7 +155,7 @@
             var valid = true
             var x = document.querySelectorAll('#regform1 input[type="password"]');
             while ((x[0].value != x[1].value) && x[1].value !="") {
-                alert("Le deux champs ne correspondent pas veuillez recommencer");
+                alert("Les deux champs ne correspondent pas veuillez recommencer");
                 valid = false;
                 document.getElementById('valider').disabled = true;
                 break;

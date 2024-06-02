@@ -17,7 +17,6 @@ Created by [Aziz Soulé](https://github.com/azizsoule) and [Ano Romaric](https:/
 # 📸 Screenshots
 
 Screenshots are available in the `screenshots` folder.
-expose screenshots of the website inside a table.
 
 ![You_Meet _ Bienvenue sur You_Meet _.jpeg](screenshots%2FYou_Meet%20_%20Bienvenue%20sur%20You_Meet%20_.jpeg)
 ![You_Meet _ Mon Profil _.jpeg](screenshots%2FYou_Meet%20_%20Mon%20Profil%20_.jpeg)
